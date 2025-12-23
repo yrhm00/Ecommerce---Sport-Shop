@@ -2,6 +2,10 @@ server:
   port: 8082
   servlet:
     context-path: /janvier
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
 
 spring:
   datasource:
@@ -25,3 +29,8 @@ spring:
     view:
       prefix: /WEB-INF/jsp/
       suffix: .jsp
+
+paypal:
+  client-id: AV5z2Iw__PdSYbBimrrnCimrojRsVg7dU4zWuxeTo1njjs8NqZtczLRoYoBeua1cEKH_cgvNe6lICaqP
+  client-secret: EMraopDis2OSNbdGRYxfhXwwYl3p8QnufbbWt8laVOGH0KXqe8TxkhjMjRz4kIq4watP4gFZO91PxWoV
+  mode: sandbox
