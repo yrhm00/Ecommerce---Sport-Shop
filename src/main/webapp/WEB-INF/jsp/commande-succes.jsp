@@ -1,0 +1,10 @@
+<%@ include file="include/importTags.jsp" %>
+<div class="container py-5 text-center">
+    <div class="alert alert-success p-5">
+        <h1 class="display-4"><spring:message code="success.title"/></h1>
+        <p class="lead mt-3"><spring:message code="success.message"/></p>
+        <p class="mb-4">Le paiement via PayPal a été validé et votre commande est en cours de préparation.</p>
+        <hr>
+        <a href="<spring:url value='/produits'/>" class="btn btn-primary mt-3"><spring:message code="success.back"/></a>
+    </div>
+</div>
