@@ -54,5 +54,16 @@
         <put-attribute name="titre" value="Détails du Produit" />
         <put-attribute name="contenu" value="/WEB-INF/jsp/produit-detail.jsp" />
     </definition>
+    <!-- Page Checkout -->
+    <definition name="checkout" extends="base.definition">
+        <put-attribute name="titre" value="Récapitulatif de la commande" />
+        <put-attribute name="contenu" value="/WEB-INF/jsp/checkout.jsp" />
+    </definition>
+
+    <!-- Page Succès Commande -->
+    <definition name="commande-succes" extends="base.definition">
+        <put-attribute name="titre" value="Commande Validée" />
+        <put-attribute name="contenu" value="/WEB-INF/jsp/commande-succes.jsp" />
+    </definition>
 </tiles-definitions>
 

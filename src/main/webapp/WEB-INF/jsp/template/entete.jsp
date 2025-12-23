@@ -5,7 +5,7 @@
     </a>
     <div class="ms-auto">
         <!-- Zone utilisateur / Langue -->
-        <span class="me-3">Bienvenue, Visiteur</span>
+        <span class="me-3"><spring:message code="menu.welcome"/>, <spring:message code="menu.visitor"/></span>
         <a href="?lang=fr" class="btn btn-sm btn-outline-primary">FR</a>
         <a href="?lang=en" class="btn btn-sm btn-outline-secondary">EN</a>
     </div>

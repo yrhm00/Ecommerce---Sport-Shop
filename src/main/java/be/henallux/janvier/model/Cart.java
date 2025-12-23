@@ -94,6 +94,20 @@ public class Cart {
                 .sum();
     }
 
+    private BigDecimal discountAmount = BigDecimal.ZERO;
+
+    public BigDecimal getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(BigDecimal discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public BigDecimal getTotalWithDiscount() {
+        return getTotal().subtract(discountAmount);
+    }
+
     // Getters et Setters
     public List<CartItem> getItems() {
         return items;

@@ -43,10 +43,23 @@
                         </c:forEach>
                     </tbody>
                     <tfoot>
-                        <tr>
-                            <td colspan="3" class="text-end"><strong>Total :</strong></td>
-                            <td colspan="2"><strong class="h4 text-primary"><fmt:formatNumber value="${cart.total}" type="currency" currencySymbol="€" minFractionDigits="2" /></strong></td>
-                        </tr>
+                        <!-- Ligne Promotion -->
+                        <c:if test="${cart.discountAmount > 0}">
+                            <tr>
+                                <td colspan="3" class="text-end text-success"><strong>Promotion (-10%) :</strong></td>
+                                <td colspan="2"><strong class="text-success">- <fmt:formatNumber value="${cart.discountAmount}" type="currency" currencySymbol="€" minFractionDigits="2" /></strong></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Total à payer :</strong></td>
+                                <td colspan="2"><strong class="h4 text-primary"><fmt:formatNumber value="${cart.totalWithDiscount}" type="currency" currencySymbol="€" minFractionDigits="2" /></strong></td>
+                            </tr>
+                        </c:if>
+                        <c:if test="${cart.discountAmount <= 0}">
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Total :</strong></td>
+                                <td colspan="2"><strong class="h4 text-primary"><fmt:formatNumber value="${cart.total}" type="currency" currencySymbol="€" minFractionDigits="2" /></strong></td>
+                            </tr>
+                        </c:if>
                     </tfoot>
                 </table>
             </div>
@@ -57,7 +70,7 @@
                    onclick="return confirm('Êtes-vous sûr de vouloir vider votre panier ?')">
                     Vider le panier
                 </a>
-                <a href="<spring:url value='/commandes/valider'/>" class="btn btn-success btn-lg float-end">
+                <a href="<spring:url value='/commandes/checkout'/>" class="btn btn-success btn-lg float-end">
                     Valider la commande
                 </a>
             </div>

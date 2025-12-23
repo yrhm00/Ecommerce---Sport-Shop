@@ -1,15 +1,19 @@
 package be.henallux.janvier.controller;
 
-import be.henallux.janvier.dataAccess.dao.ProductDataAccess;
-import be.henallux.janvier.model.Cart;
-import be.henallux.janvier.model.CartItem;
-import be.henallux.janvier.model.Product;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
+import be.henallux.janvier.dataAccess.dao.ProductDataAccess;
+import be.henallux.janvier.model.Cart;
+import be.henallux.janvier.model.Product;
 
 @Controller
 @RequestMapping(value="/panier")
@@ -18,10 +22,12 @@ public class PanierController {
     private static final String CART_SESSION_KEY = "cart";
 
     private final ProductDataAccess productDAO;
+    private final be.henallux.janvier.service.PromotionService promotionService;
 
     @Autowired
-    public PanierController(ProductDataAccess productDAO) {
+    public PanierController(ProductDataAccess productDAO, be.henallux.janvier.service.PromotionService promotionService) {
         this.productDAO = productDAO;
+        this.promotionService = promotionService;
     }
 
     /**
@@ -30,6 +36,11 @@ public class PanierController {
     @GetMapping
     public String showPanier(HttpSession session, Model model) {
         Cart cart = getCart(session);
+        
+        // Calculer la promotion
+        java.math.BigDecimal discount = promotionService.calculateDiscount(cart.getTotal());
+        cart.setDiscountAmount(discount);
+        
         model.addAttribute("cart", cart);
         return "panier";
     }
