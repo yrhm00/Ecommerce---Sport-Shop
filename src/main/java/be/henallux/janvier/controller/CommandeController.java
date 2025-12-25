@@ -50,7 +50,7 @@ public class CommandeController {
         cart.setDiscountAmount(discount);
         
         model.addAttribute("cart", cart);
-        return "checkout"; // Tiles Definition: page de confirmation
+        return "checkout"; // page de confirmation
     }
 
     /**
@@ -138,6 +138,6 @@ public class CommandeController {
      */
     @GetMapping("/succes")
     public String success() {
-        return "commande-succes"; // Tiles Definition
+        return "commande-succes"; 
     }
 }

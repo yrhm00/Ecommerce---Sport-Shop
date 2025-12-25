@@ -36,11 +36,9 @@ public class PromotionServiceTest {
     @Test
     public void testCalculateDiscountWithTotalOverThreshold() {
         BigDecimal total = new BigDecimal("200.00");
-        // 10% of 200 is 20
+       
         BigDecimal expected = new BigDecimal("20.000"); 
-        // Note: internal implementation uses multiply which might result in scale changes, 
-        // assertEquals handles BigDecimal comparison carefully or we might need strict scale matching.
-        // Let's assume standard behavior. If test fails on scale, we'll strip trailing zeros.
+        
         assertEquals(0, expected.compareTo(promotionService.calculateDiscount(total)));
     }
 }

@@ -4,9 +4,7 @@ import java.util.List;
 
 import be.henallux.janvier.model.Product;
 
-/**
- * Interface DataAccess pour les produits
- */
+
 public interface ProductDataAccess {
     
     List<Product> findAll();

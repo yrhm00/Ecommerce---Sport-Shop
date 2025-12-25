@@ -36,7 +36,7 @@
             modelAttribute="user"
             class="needs-validation"
           >
-            <!-- Username (Read Only) -->
+            <!-- Nom d'utilisateur (Lecture seule) -->
             <div class="mb-4">
               <label class="form-label text-muted small text-uppercase fw-bold"><spring:message code="profile.username.fixed"/></label>
               <div class="input-group">
@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <!-- Email et Tel -->
+            <!-- Email et Téléphone -->
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
                   <form:label path="email" class="form-label fw-bold"><spring:message code="user.email"/></form:label>

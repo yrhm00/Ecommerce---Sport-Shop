@@ -11,7 +11,7 @@
                         <p class="text-muted"><spring:message code="register.subtitle"/></p>
                     </div>
 
-                    <!-- Global Error -->
+                    <!-- Erreur Globale -->
                     <c:if test="${not empty errorMessage}">
                         <div class="alert alert-danger d-flex align-items-center mb-4 text-center" role="alert">
                             <i class="bi bi-exclamation-triangle-fill me-2"></i> <spring:message code="${errorMessage}"/>

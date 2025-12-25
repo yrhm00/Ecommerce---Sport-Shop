@@ -59,7 +59,6 @@
 
             <sec:authorize access="isAuthenticated()">
                 <form action="<spring:url value='/commandes/confirmer'/>" method="post" class="mt-4">
-                    <!-- CSRF Token is usually handled automatically by Spring Security tags but good to keep in mind -->
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     
                     <c:if test="${not empty paymentError}">
@@ -92,7 +91,7 @@
                         </div>
                     </div>
 
-                    <!-- Button removed from here as it is now inside card body -->
+                    <!-- Bouton retiré d'ici car il est maintenant dans le corps de la carte -->
                 </form>
             </sec:authorize>
         </c:otherwise>

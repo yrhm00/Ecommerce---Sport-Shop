@@ -59,17 +59,13 @@ public class ProviderConverter {
         if (model == null) return null;
         UserEntity entity = mapper.map(model, UserEntity.class);
         
-        // IMPORTANT: On vide les autorités mapped par Dozer pour éviter que
-        // le cascade save ne tente de les sauver maintenant.
-        // UserDAO s'occupera de les sauver manuellement ensuite.
-        // Cela évite l'erreur "PropertyAccessException ... AuthorityEntity.id"
-        // et les doublons potentiels.
+       
         entity.setAuthorities(null);
         
         return entity;
     }
 
-    // ========== AUTHORITY ==========
+   
     public Authority authorityEntityToModel(AuthorityEntity entity) {
         if (entity == null) return null;
         return new Authority(entity.getAuthority());
@@ -80,7 +76,7 @@ public class ProviderConverter {
         return new AuthorityEntity(username, model.getAuthority());
     }
 
-    // ========== CATEGORY ==========
+   
     public Category categoryEntityToModel(CategoryEntity entity) {
         return categoryEntityToModel(entity, null);
     }
@@ -107,7 +103,7 @@ public class ProviderConverter {
         return mapper.map(model, CategoryEntity.class);
     }
 
-    // ========== PRODUCT ==========
+    
     public Product productEntityToModel(ProductEntity entity) {
         return productEntityToModel(entity, null);
     }

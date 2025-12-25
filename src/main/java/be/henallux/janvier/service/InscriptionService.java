@@ -52,7 +52,7 @@ public class InscriptionService {
         // Créer l'utilisateur
         User user = new User();
         user.setUsername(form.getUsername());
-        user.setPassword(passwordEncoder.encode(form.getPassword())); // Hash BCrypt
+        user.setPassword(passwordEncoder.encode(form.getPassword())); 
         user.setNom(form.getNom());
         user.setPrenom(form.getPrenom());
         user.setEmail(form.getEmail());
@@ -62,7 +62,7 @@ public class InscriptionService {
         user.setLocalite(form.getLocalite());
         user.setEnabled(true);
 
-        // Attribuer le rôle ROLE_USER par défaut
+        
         Set<Authority> authorities = new HashSet<>();
         authorities.add(new Authority("ROLE_USER"));
         user.setAuthorities(authorities);

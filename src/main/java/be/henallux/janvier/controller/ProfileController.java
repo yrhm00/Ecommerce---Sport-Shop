@@ -82,14 +82,14 @@ public class ProfileController {
         currentUser.setTelephone(formUser.getTelephone());
         currentUser.setAdresse(formUser.getAdresse());
         
-        // On garde le mot de passe existant (car formUser.password est null ou vide)
+        // On garde le mot de passe existant 
         // On garde enabled et authorities
         
         try {
             userDAO.save(currentUser);
             model.addAttribute("successMessage", "Profil mis à jour avec succès!");
             // Recharger l'utilisateur pour l'affichage
-            // Note: formUser a des champs nulls (pwd), on renvoie currentUser
+            
             // Mais on doit masquer le password
             currentUser.setPassword(null);
             model.addAttribute("user", currentUser); 

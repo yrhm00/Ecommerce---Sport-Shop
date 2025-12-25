@@ -2,12 +2,12 @@
 <%@ include file="include/importTags.jsp" %>
 <div class="container-fluid h-100">
   <div class="row justify-content-center align-items-center h-100">
-    <!-- Image Column -->
+    <!-- Colonne Image -->
     <div class="col-md-6 d-none d-md-block p-0 h-100" style="min-height: 80vh;">
       <img src="<spring:url value='/images/auth_sidebar.png'/>" alt="Login Visual" class="w-100 h-100" style="object-fit: cover;">
     </div>
     
-    <!-- Form Column -->
+    <!-- Colonne Formulaire -->
     <div class="col-md-6 col-lg-5 col-xl-4 py-5">
       <div class="px-4 px-md-5">
         <div class="text-center mb-4">

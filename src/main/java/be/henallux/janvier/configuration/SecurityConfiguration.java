@@ -54,7 +54,7 @@ public class SecurityConfiguration {
                 .logoutSuccessUrl("/?logout")
                 .permitAll()
             .and()
-            .csrf().disable(); // TODO: Activer CSRF en production
+            .csrf().disable(); 
             
         return http.build();
     }

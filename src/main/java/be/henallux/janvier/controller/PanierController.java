@@ -66,7 +66,7 @@ public class PanierController {
             if (taille != null && !taille.isEmpty() && product.getSizesStock() != null && product.getSizesStock().containsKey(taille)) {
                  stockSuffisant = product.getSizesStock().get(taille) >= quantite;
             } else {
-                 // Fallback au stock global si pas de taille ou pas de gestion de taille
+            
                  stockSuffisant = product.getStock() >= quantite;
             }
 
@@ -81,7 +81,7 @@ public class PanierController {
     }
 
     /**
-     * Modifie la quantité d'un produit dans le panier
+     * odifie la quantité d'un produit dans le panier
      */
     @PostMapping("/modifier")
     public String updateQuantity(@RequestParam Integer productId,

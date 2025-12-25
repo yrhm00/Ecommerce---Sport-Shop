@@ -5,7 +5,7 @@
         <div class="col-lg-12">
             <h1 class="display-4 mb-4"><spring:message code="about.title"/></h1>
             
-            <!-- Mission Section -->
+            <!-- Section Mission -->
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
                     <h2 class="card-title h3 text-primary"><spring:message code="about.mission.title"/></h2>
@@ -13,7 +13,7 @@
                 </div>
             </div>
             
-            <!-- Values Section -->
+            <!-- Section Valeurs -->
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
                     <h2 class="card-title h3 text-primary"><spring:message code="about.values.title"/></h2>
@@ -34,7 +34,7 @@
                 </div>
             </div>
             
-            <!-- History Section -->
+            <!-- Section Histoire -->
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
                     <h2 class="card-title h3 text-primary"><spring:message code="about.history.title"/></h2>
@@ -42,7 +42,7 @@
                 </div>
             </div>
             
-            <!-- Commitment Section -->
+            <!-- Section Engagement -->
             <div class="card mb-4 shadow-sm">
                 <div class="card-body">
                     <h2 class="card-title h3 text-primary"><spring:message code="about.commitment.title"/></h2>
@@ -50,7 +50,7 @@
                 </div>
             </div>
             
-            <!-- Call to Action -->
+            <!-- Appel à l'action -->
             <div class="text-center mt-5">
                 <a href="<spring:url value='/produits'/>" class="btn btn-primary btn-lg">
                     <spring:message code="catalog.btn.view"/>

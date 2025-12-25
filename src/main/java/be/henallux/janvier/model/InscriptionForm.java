@@ -35,8 +35,7 @@ public class InscriptionForm {
     @Size(max = 150)
     private String email;
 
-    @Size(min = 9, max = 20)
-    @Pattern(regexp = "^[0-9+ ]*$", message = "Le numéro de téléphone ne doit contenir que des chiffres, des espaces ou le symbole +")
+    @Pattern(regexp = "^$|^[0-9+ ]{9,20}$", message = "{Pattern.inscriptionForm.telephone}")
     private String telephone;
 
     @NotNull

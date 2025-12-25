@@ -47,7 +47,7 @@ public class ProduitController {
         
         model.addAttribute("category", category);
         model.addAttribute("products", products);
-        return "produits-liste"; // Tiles Definition
+        return "produits-liste"; 
     }
 
     /**
@@ -57,7 +57,7 @@ public class ProduitController {
     public String showProductDetails(@PathVariable Integer productId, Model model) {
         Product product = productService.getProductById(productId);
         model.addAttribute("product", product);
-        return "produit-detail"; // Tiles Definition
+        return "produit-detail"; 
     }
 
     @GetMapping("/nouveautes")
