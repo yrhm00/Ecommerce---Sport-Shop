@@ -14,7 +14,7 @@
                     <!-- Global Error -->
                     <c:if test="${not empty errorMessage}">
                         <div class="alert alert-danger d-flex align-items-center mb-4 text-center" role="alert">
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i> ${errorMessage}
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i> <spring:message code="${errorMessage}"/>
                         </div>
                     </c:if>
 
@@ -86,10 +86,26 @@
 
                         <div class="col-12">
                             <div class="form-floating">
-                                <form:textarea path="adresse" class="form-control" id="reg-addr" placeholder="Address" style="height: 100px" />
+                                <form:input path="adresse" class="form-control" id="reg-addr" placeholder="Address" />
                                 <form:label path="adresse" for="reg-addr"><spring:message code="user.address"/></form:label>
                             </div>
                             <form:errors path="adresse" cssClass="text-danger small ms-1" />
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <form:input path="codePostal" type="text" class="form-control" id="reg-zip" placeholder="Zip" />
+                                <form:label path="codePostal" for="reg-zip"><spring:message code="user.zip"/></form:label>
+                            </div>
+                            <form:errors path="codePostal" cssClass="text-danger small ms-1" />
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="form-floating">
+                                <form:input path="localite" type="text" class="form-control" id="reg-city" placeholder="City" />
+                                <form:label path="localite" for="reg-city"><spring:message code="user.city"/></form:label>
+                            </div>
+                            <form:errors path="localite" cssClass="text-danger small ms-1" />
                         </div>
 
                         <div class="col-12 mt-4 d-flex justify-content-between align-items-center">

@@ -1,11 +1,11 @@
 package be.henallux.janvier.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class User implements UserDetails {
 
@@ -133,6 +133,27 @@ public class User implements UserDetails {
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
+    }
+
+    private String codePostal;
+    private String localite;
+
+    // ... existing getters/setters ...
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
+    }
+
+    public String getLocalite() {
+        return localite;
+    }
+
+    public void setLocalite(String localite) {
+        this.localite = localite;
     }
 
     public void setAuthorities(Set<Authority> authorities) {

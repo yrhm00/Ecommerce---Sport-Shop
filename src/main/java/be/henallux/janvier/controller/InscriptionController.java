@@ -1,8 +1,7 @@
 package be.henallux.janvier.controller;
 
-import be.henallux.janvier.model.InscriptionForm;
-import be.henallux.janvier.model.User;
-import be.henallux.janvier.service.InscriptionService;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +11,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.validation.Valid;
+import be.henallux.janvier.model.InscriptionForm;
+import be.henallux.janvier.model.User;
+import be.henallux.janvier.service.InscriptionService;
 
 @Controller
 @RequestMapping(value="/inscription")
@@ -43,19 +44,19 @@ public class InscriptionController {
 
         // Vérification que les mots de passe correspondent
         if (!inscriptionService.passwordsMatch(form.getPassword(), form.getConfirmPassword())) {
-            model.addAttribute("errorMessage", "Les mots de passe ne correspondent pas");
+            model.addAttribute("errorMessage", "inscription.error.passwordMismatch");
             return "inscription";
         }
 
         // Vérification que le username n'existe pas déjà
         if (inscriptionService.usernameExists(form.getUsername())) {
-            model.addAttribute("errorMessage", "Ce nom d'utilisateur existe déjà");
+            model.addAttribute("errorMessage", "inscription.error.usernameExists");
             return "inscription";
         }
 
         // Vérification que l'email n'existe pas déjà
         if (inscriptionService.emailExists(form.getEmail())) {
-            model.addAttribute("errorMessage", "Cet email est déjà utilisé");
+            model.addAttribute("errorMessage", "inscription.error.emailExists");
             return "inscription";
         }
 

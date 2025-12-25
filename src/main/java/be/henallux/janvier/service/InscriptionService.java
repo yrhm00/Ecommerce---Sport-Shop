@@ -1,15 +1,16 @@
 package be.henallux.janvier.service;
 
-import be.henallux.janvier.dataAccess.dao.UserDataAccess;
-import be.henallux.janvier.model.Authority;
-import be.henallux.janvier.model.InscriptionForm;
-import be.henallux.janvier.model.User;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Set;
+import be.henallux.janvier.dataAccess.dao.UserDataAccess;
+import be.henallux.janvier.model.Authority;
+import be.henallux.janvier.model.InscriptionForm;
+import be.henallux.janvier.model.User;
 
 @Service
 public class InscriptionService {
@@ -57,6 +58,8 @@ public class InscriptionService {
         user.setEmail(form.getEmail());
         user.setTelephone(form.getTelephone());
         user.setAdresse(form.getAdresse());
+        user.setCodePostal(form.getCodePostal());
+        user.setLocalite(form.getLocalite());
         user.setEnabled(true);
 
         // Attribuer le rôle ROLE_USER par défaut
