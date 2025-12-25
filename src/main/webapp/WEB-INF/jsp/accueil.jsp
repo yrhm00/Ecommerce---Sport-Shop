@@ -1,25 +1,38 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="include/importTags.jsp" %>
-<div class="p-5 mb-4 bg-light rounded-3">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold"><spring:message code="home.welcome.title"/></h1>
-        <p class="col-md-8 fs-4"><spring:message code="home.welcome.text"/></p>
-        <button class="btn btn-primary btn-lg" type="button" onclick="window.location.href='<spring:url value="/produits"/>'"><spring:message code="home.btn.catalog"/></button>
+<div class="row align-items-center rounded-3 overflow-hidden shadow-lg mb-4 bg-white">
+    <div class="col-lg-7 p-0 overflow-hidden" style="max-height: 400px;">
+        <img src="<spring:url value='/images/home_hero.png'/>" class="w-100" style="object-fit: cover; height: 100%;" alt="Jogging Hero">
+    </div>
+    <div class="col-lg-5 p-4 p-lg-5">
+        <h1 class="display-5 fw-bold lh-1 mb-3"><spring:message code="home.welcome.title"/></h1>
+        <p class="lead"><spring:message code="home.welcome.text"/></p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+            <a href="<spring:url value='/produits'/>" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold"><spring:message code="home.btn.catalog"/></a>
+        </div>
     </div>
 </div>
 
 <div class="row align-items-md-stretch">
-    <div class="col-md-6">
-        <div class="h-100 p-5 text-white bg-dark rounded-3">
+    <div class="col-md-6 mb-4">
+        <div class="h-100 p-5 text-white bg-dark rounded-3 d-flex flex-column justify-content-center">
             <h2><spring:message code="home.news.title"/></h2>
             <p><spring:message code="home.news.text"/></p>
-            <button class="btn btn-outline-light" type="button"><spring:message code="home.news.btn"/></button>
+            <div class="mt-auto">
+                <a href="<spring:url value='/produits/nouveautes'/>" class="btn btn-outline-light"><spring:message code="home.news.btn"/></a>
+            </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="h-100 p-5 bg-light border rounded-3">
-            <h2><spring:message code="home.promo.title"/></h2>
-            <p><spring:message code="home.promo.text"/></p>
-            <button class="btn btn-outline-secondary" type="button"><spring:message code="home.promo.btn"/></button>
+    <div class="col-md-6 mb-4">
+        <div class="h-100 border rounded-3 overflow-hidden position-relative text-white">
+            <img src="<spring:url value='/images/promo.png'/>" class="w-100 h-100 position-absolute top-0 start-0" style="object-fit: cover; filter: brightness(0.6);" alt="Promo">
+            <div class="position-relative p-5 h-100 d-flex flex-column justify-content-center">
+                <h2 class="display-6 fw-bold"><spring:message code="home.promo.title"/></h2>
+                <p class="fs-5"><spring:message code="home.promo.text"/></p>
+                <div class="mt-auto">
+                    <a href="<spring:url value='/produits/promotions'/>" class="btn btn-light"><spring:message code="home.promo.btn"/></a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

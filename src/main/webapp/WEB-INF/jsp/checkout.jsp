@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="include/importTags.jsp" %>
 <div class="container py-5">
     <h2><spring:message code="checkout.title"/></h2>
@@ -31,11 +32,11 @@
                         </c:forEach>
                         <c:if test="${sessionScope.cart.discountAmount > 0}">
                             <tr>
-                                <td colspan="3" class="text-end text-success fw-bold">Promotion (-10%)</td>
+                                <td colspan="3" class="text-end text-success fw-bold"><spring:message code="cart.promo.label"/></td>
                                 <td class="text-success fw-bold">- <fmt:formatNumber value="${sessionScope.cart.discountAmount}" type="currency" currencySymbol="€"/></td>
                             </tr>
                             <tr>
-                                <td colspan="3" class="text-end fw-bold">Total à payer</td>
+                                <td colspan="3" class="text-end fw-bold"><spring:message code="cart.total.pay"/></td>
                                 <td class="fw-bold"><fmt:formatNumber value="${sessionScope.cart.totalWithDiscount}" type="currency" currencySymbol="€"/></td>
                             </tr>
                         </c:if>
@@ -63,17 +64,17 @@
                     
                     <c:if test="${not empty paymentError}">
                         <div class="alert alert-danger">
-                            ${paymentError}
+                            <spring:message code="${paymentError}"/>
                         </div>
                     </c:if>
                     <c:if test="${not empty param.error}">
                         <div class="alert alert-danger">
                             <c:choose>
                                 <c:when test="${param.error == 'payment_cancelled'}">
-                                    Paiement annulé par l'utilisateur.
+                                    <spring:message code="error.payment.cancelled"/>
                                 </c:when>
                                 <c:otherwise>
-                                    Échec du paiement PayPal. Veuillez réessayer.
+                                    <spring:message code="error.payment.failed"/>
                                 </c:otherwise>
                             </c:choose>
                         </div>
@@ -81,12 +82,12 @@
 
                     <div class="card mb-4">
                         <div class="card-header bg-primary text-white">
-                            Paiement via PayPal
+                            <spring:message code="payment.paypal.header"/>
                         </div>
                         <div class="card-body text-center">
-                            <p class="mb-3">Vous allez être redirigé vers PayPal pour sécuriser votre paiement.</p>
+                            <p class="mb-3"><spring:message code="payment.paypal.redirect"/></p>
                             <button type="submit" class="btn btn-warning btn-lg">
-                                <i class="fab fa-paypal"></i> Payer avec PayPal
+                                <i class="fab fa-paypal"></i> <spring:message code="payment.paypal.button"/>
                             </button>
                         </div>
                     </div>

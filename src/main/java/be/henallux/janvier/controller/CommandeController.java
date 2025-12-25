@@ -60,36 +60,69 @@ public class CommandeController {
     public String confirmOrder(HttpSession session, Principal principal, 
                                javax.servlet.http.HttpServletRequest request,
                                Model model) {
+        System.out.println("=== CONFIRM ORDER CALLED ===");
+        System.out.println("Principal: " + (principal != null ? principal.getName() : "NULL"));
+        
         if (principal == null) {
+            System.out.println("Principal is null, redirecting to login");
             return "redirect:/connexion";
         }
 
         Cart cart = (Cart) session.getAttribute("cart");
+        System.out.println("Cart: " + (cart != null ? "EXISTS" : "NULL"));
+        System.out.println("Cart items: " + (cart != null ? cart.getItems().size() : "N/A"));
+        
         if (cart != null && !cart.getItems().isEmpty()) {
+            System.out.println("Cart total: " + cart.getTotalWithDiscount());
             
-            String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-            String returnUrl = baseUrl + "/commandes/pay/success";
-            String cancelUrl = baseUrl + "/commandes/pay/cancel";
+            // ENREGISTRER LA COMMANDE AVANT LE PAIEMENT avec paye = false
+            System.out.println("Creating order in database...");
+            Integer orderId = orderService.createOrder(cart, principal.getName(), false);
+            System.out.println("Order created with ID: " + orderId);
             
-            String approvalLink = paymentService.createOrder(cart.getTotalWithDiscount(), returnUrl, cancelUrl);
-            
-            if (approvalLink != null) {
-                return "redirect:" + approvalLink;
+            if (orderId != null) {
+                // Stocker l'ID de commande en session pour mise à jour après paiement
+                session.setAttribute("pendingOrderId", orderId);
+                
+                String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+                String returnUrl = baseUrl + "/commandes/pay/success";
+                String cancelUrl = baseUrl + "/commandes/pay/cancel";
+                
+                System.out.println("Calling PayPal createOrder...");
+                String approvalLink = paymentService.createOrder(cart.getTotalWithDiscount(), returnUrl, cancelUrl);
+                
+                if (approvalLink != null) {
+                    System.out.println("PayPal approval link received, redirecting...");
+                    // Vider le panier maintenant que la commande est enregistrée
+                    cart.clear();
+                    session.setAttribute("cart", cart);
+                    return "redirect:" + approvalLink;
+                } else {
+                    System.err.println("PayPal approval link is NULL");
+                }
+            } else {
+                System.err.println("Order ID is NULL - order creation failed");
             }
             
-            model.addAttribute("paymentError", "Erreur lors de l'initialisation du paiement PayPal.");
+            model.addAttribute("paymentError", "error.payment.init");
             model.addAttribute("cart", cart);
             return "checkout";
         }
         
+        System.out.println("Cart is empty or null, redirecting to products");
         return "redirect:/produits";
     }
 
     @GetMapping("/pay/success")
     public String handlePaySuccess(@org.springframework.web.bind.annotation.RequestParam("token") String token, HttpSession session, Principal principal) {
         if (paymentService.captureOrder(token)) {
-            Cart cart = (Cart) session.getAttribute("cart");
-            orderService.createOrder(cart, principal.getName(), true);
+            // Mettre à jour le statut de paiement de la commande
+            Integer orderId = (Integer) session.getAttribute("pendingOrderId");
+            if (orderId != null) {
+                orderService.updateOrderPaymentStatus(orderId, true);
+                session.removeAttribute("pendingOrderId");
+            }
+            
             return "redirect:/commandes/succes";
         }
         return "redirect:/commandes/checkout?error=payment_failed";

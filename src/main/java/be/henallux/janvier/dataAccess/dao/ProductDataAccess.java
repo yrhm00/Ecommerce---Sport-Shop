@@ -1,8 +1,8 @@
 package be.henallux.janvier.dataAccess.dao;
 
-import be.henallux.janvier.model.Product;
-
 import java.util.List;
+
+import be.henallux.janvier.model.Product;
 
 /**
  * Interface DataAccess pour les produits
@@ -14,6 +14,10 @@ public interface ProductDataAccess {
     Product findById(Integer id);
     
     List<Product> findByCategoryId(Integer categoryId);
+
+    List<Product> findNewArrivals();
+
+    List<Product> findPromotions();
 }
 
 

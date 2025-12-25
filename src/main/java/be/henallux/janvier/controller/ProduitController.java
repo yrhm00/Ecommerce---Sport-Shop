@@ -59,4 +59,30 @@ public class ProduitController {
         model.addAttribute("product", product);
         return "produit-detail"; // Tiles Definition
     }
+
+    @GetMapping("/nouveautes")
+    public String showNewArrivals(Model model) {
+        List<Product> products = productService.getNewArrivals();
+        
+        // Création d'une catégorie virtuelle pour l'affichage
+        Category category = new Category();
+        category.setNom("Nouveautés");
+        
+        model.addAttribute("category", category);
+        model.addAttribute("products", products);
+        return "produits-liste";
+    }
+
+    @GetMapping("/promotions")
+    public String showPromotions(Model model) {
+        List<Product> products = productService.getPromotions();
+        
+        // Création d'une catégorie virtuelle pour l'affichage
+        Category category = new Category();
+        category.setNom("Promotions");
+        
+        model.addAttribute("category", category);
+        model.addAttribute("products", products);
+        return "produits-liste";
+    }
 }

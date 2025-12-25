@@ -1,6 +1,8 @@
 package be.henallux.janvier.model;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Classe modèle pour le formulaire d'inscription
@@ -32,7 +34,7 @@ public class InscriptionForm {
     @Size(max = 150)
     private String email;
 
-    @Size(min = 10, max = 20, message = "Le téléphone doit contenir entre 10 et 20 caractères")
+    @Size(min = 0, max = 20, message = "Le téléphone doit contenir au maximum 20 caractères")
     private String telephone;
 
     @NotNull

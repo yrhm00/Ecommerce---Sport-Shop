@@ -20,36 +20,67 @@ public class ProductService {
 
     public List<Product> getAllProducts() {
         List<Product> products = productDAO.findAll();
-        products.forEach(this::applyPromotions);
+        java.util.Set<Integer> newProductIds = getNewProductIds();
+        products.forEach(p -> applyPromotionsAndMarkNew(p, newProductIds));
         return products;
     }
 
     public List<Product> getProductsByCategory(Integer categoryId) {
         List<Product> products = productDAO.findByCategoryId(categoryId);
-        products.forEach(this::applyPromotions);
+        java.util.Set<Integer> newProductIds = getNewProductIds();
+        products.forEach(p -> applyPromotionsAndMarkNew(p, newProductIds));
         return products;
     }
 
     public Product getProductById(Integer id) {
         Product product = productDAO.findById(id);
         if (product != null) {
-            applyPromotions(product);
+            java.util.Set<Integer> newProductIds = getNewProductIds();
+            applyPromotionsAndMarkNew(product, newProductIds);
         }
         return product;
     }
 
+    public List<Product> getNewArrivals() {
+        List<Product> products = productDAO.findNewArrivals();
+        java.util.Set<Integer> newProductIds = getNewProductIds();
+        products.forEach(p -> applyPromotionsAndMarkNew(p, newProductIds));
+        return products;
+    }
+
+    public List<Product> getPromotions() {
+        List<Product> products = productDAO.findPromotions();
+        java.util.Set<Integer> newProductIds = getNewProductIds();
+        products.forEach(p -> applyPromotionsAndMarkNew(p, newProductIds));
+        return products;
+    }
+
+
     /**
-     * Applique une promotion de 10% si le prix est supérieur à 100€
+     * Récupère les IDs des produits considérés comme "nouveaux"
      */
-    private void applyPromotions(Product product) {
+    private java.util.Set<Integer> getNewProductIds() {
+        List<Product> newArrivals = productDAO.findNewArrivals();
+        return newArrivals.stream()
+            .map(Product::getId)
+            .collect(java.util.stream.Collectors.toSet());
+    }
+
+    /**
+     * Applique les promotions et marque les produits nouveaux
+     */
+    private void applyPromotionsAndMarkNew(Product product, java.util.Set<Integer> newProductIds) {
+        // Marquer comme nouveau si dans la liste des nouveautés
+        if (newProductIds.contains(product.getId())) {
+            product.setNewArrival(true);
+        }
+        
+        // Appliquer les promotions
         if (product.getPrix() != null && product.getPrix().doubleValue() > 100.0) {
-            // Logique simple : 10% de réduction pour les articles chers
-            // En réalité, on pourrait stocker les règles de promo en DB
+            product.setOriginalPrice(product.getPrix());
             double newPrice = product.getPrix().doubleValue() * 0.9;
-            // Arrondir à 2 décimales
             newPrice = Math.round(newPrice * 100.0) / 100.0;
             product.setPrix(java.math.BigDecimal.valueOf(newPrice));
-            // On pourrait ajouter un champ "originalPrice" au modèle pour afficher le prix barré
         }
     }
 }

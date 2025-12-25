@@ -29,6 +29,11 @@ public class PaymentService {
     }
 
     public String createOrder(BigDecimal totalAmount, String returnUrl, String cancelUrl) {
+        System.out.println("=== PayPal Create Order START ===");
+        System.out.println("Amount: " + totalAmount);
+        System.out.println("Return URL: " + returnUrl);
+        System.out.println("Cancel URL: " + cancelUrl);
+        
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.intent("CAPTURE");
 
@@ -43,11 +48,12 @@ public class PaymentService {
         
         // Generate a unique Invoice ID to prevent "Duplicate Transaction" errors in Sandbox
         String invoiceId = "INV-" + java.util.UUID.randomUUID().toString();
+        System.out.println("Invoice ID: " + invoiceId);
         
         PurchaseUnitRequest purchaseUnitRequest = new PurchaseUnitRequest()
                 .invoiceId(invoiceId) // Prevents TRANSACTION_REFUSED if blocking duplicate payments is on
                 .amount(new AmountWithBreakdown()
-                        .currencyCode("USD")
+                        .currencyCode("EUR") // Changed from USD to EUR
                         .value(totalAmount.setScale(2, java.math.RoundingMode.HALF_UP).toString()));
         purchaseUnitRequests.add(purchaseUnitRequest);
         orderRequest.purchaseUnits(purchaseUnitRequests);
@@ -55,19 +61,36 @@ public class PaymentService {
         OrdersCreateRequest request = new OrdersCreateRequest().requestBody(orderRequest);
 
         try {
+            System.out.println("Sending request to PayPal...");
             var response = payPalHttpClient.execute(request);
             Order order = response.result();
-            return order.links().stream()
+            System.out.println("PayPal Order Created: " + order.id());
+            System.out.println("Order Status: " + order.status());
+            
+            String approvalLink = order.links().stream()
                     .filter(link -> "approve".equals(link.rel()))
                     .findFirst()
                     .orElseThrow(() -> new NoSuchElementException("No approval link found"))
                     .href();
+            
+            System.out.println("Approval Link: " + approvalLink);
+            System.out.println("=== PayPal Create Order SUCCESS ===");
+            return approvalLink;
         } catch (IOException e) {
-            System.err.println("PayPal Create Order Failed: " + e.getMessage());
+            System.err.println("=== PayPal Create Order FAILED (IOException) ===");
+            System.err.println("Error Message: " + e.getMessage());
+            System.err.println("Error Class: " + e.getClass().getName());
             e.printStackTrace();
             return null;
-        } catch (RuntimeException e) { // Catching other possible runtime exceptions from SDK
-            System.err.println("PayPal Create Order Runtime Error: " + e.getMessage());
+        } catch (NoSuchElementException e) {
+            System.err.println("=== PayPal Create Order FAILED (No Approval Link) ===");
+            System.err.println("Error Message: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        } catch (Exception e) { // Catching all other exceptions
+            System.err.println("=== PayPal Create Order FAILED (Unexpected Error) ===");
+            System.err.println("Error Message: " + e.getMessage());
+            System.err.println("Error Class: " + e.getClass().getName());
             e.printStackTrace();
             return null;
         }

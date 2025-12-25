@@ -18,43 +18,51 @@ public class Cart {
     /**
      * Ajoute un produit au panier ou augmente sa quantité s'il existe déjà
      */
-    public void addItem(Product product, Integer quantite) {
+    /**
+     * Ajoute un produit au panier ou augmente sa quantité s'il existe déjà
+     */
+    public void addItem(Product product, Integer quantite, String taille) {
         if (product == null || quantite == null || quantite <= 0) {
             return;
         }
 
-        // Chercher si le produit est déjà dans le panier
-        CartItem existingItem = findItemByProductId(product.getId());
+        // Chercher si le produit est déjà dans le panier (avec la même taille)
+        CartItem existingItem = findItemByProductAndSize(product.getId(), taille);
         
         if (existingItem != null) {
             // Augmenter la quantité
             existingItem.setQuantite(existingItem.getQuantite() + quantite);
         } else {
             // Ajouter un nouvel article
-            items.add(new CartItem(product, quantite));
+            items.add(new CartItem(product, quantite, taille));
         }
+    }
+
+    public void addItem(Product product, Integer quantite) {
+        addItem(product, quantite, null);
     }
 
     /**
      * Modifie la quantité d'un produit dans le panier
      */
-    public void updateQuantity(Integer productId, Integer quantite) {
+    public void updateQuantity(Integer productId, Integer quantite, String taille) {
         if (quantite == null || quantite <= 0) {
-            removeItem(productId);
+            removeItem(productId, taille);
             return;
         }
 
-        CartItem item = findItemByProductId(productId);
+        CartItem item = findItemByProductAndSize(productId, taille);
         if (item != null) {
             item.setQuantite(quantite);
         }
     }
 
     /**
-     * Supprime un produit du panier
+     * Supprime un produit du panier (taille spécifique ou nulle)
      */
-    public void removeItem(Integer productId) {
-        items.removeIf(item -> item.getProduct().getId().equals(productId));
+    public void removeItem(Integer productId, String taille) {
+        items.removeIf(item -> item.getProduct().getId().equals(productId) &&
+            ((item.getTaille() == null && taille == null) || (item.getTaille() != null && item.getTaille().equals(taille))));
     }
 
     /**
@@ -62,17 +70,21 @@ public class Cart {
      */
     public void clear() {
         items.clear();
+        discountAmount = BigDecimal.ZERO;
     }
 
     /**
      * Trouve un article par son productId
      */
-    private CartItem findItemByProductId(Integer productId) {
+    private CartItem findItemByProductAndSize(Integer productId, String taille) {
         return items.stream()
-                .filter(item -> item.getProduct().getId().equals(productId))
+                .filter(item -> item.getProduct().getId().equals(productId) && 
+                       ((item.getTaille() == null && taille == null) || (item.getTaille() != null && item.getTaille().equals(taille))))
                 .findFirst()
                 .orElse(null);
     }
+
+
 
     /**
      * Calcule le total du panier

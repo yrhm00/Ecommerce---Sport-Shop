@@ -51,13 +51,25 @@ public class PanierController {
     @GetMapping("/ajouter/{productId}")
     public String addToCart(@PathVariable Integer productId,
                             @RequestParam(defaultValue = "1") Integer quantite,
+                            @RequestParam(required = false) String taille,
                             HttpSession session) {
         Product product = productDAO.findById(productId);
         
-        if (product != null && product.getStock() >= quantite) {
-            Cart cart = getCart(session);
-            cart.addItem(product, quantite);
-            session.setAttribute(CART_SESSION_KEY, cart);
+        if (product != null) {
+            // Vérifier le stock spécifique à la taille si une taille est fournie
+            boolean stockSuffisant = false;
+            if (taille != null && !taille.isEmpty() && product.getSizesStock() != null && product.getSizesStock().containsKey(taille)) {
+                 stockSuffisant = product.getSizesStock().get(taille) >= quantite;
+            } else {
+                 // Fallback au stock global si pas de taille ou pas de gestion de taille
+                 stockSuffisant = product.getStock() >= quantite;
+            }
+
+            if (stockSuffisant) {
+                Cart cart = getCart(session);
+                cart.addItem(product, quantite, taille);
+                session.setAttribute(CART_SESSION_KEY, cart);
+            }
         }
         
         return "redirect:/panier";
@@ -69,9 +81,10 @@ public class PanierController {
     @PostMapping("/modifier")
     public String updateQuantity(@RequestParam Integer productId,
                                  @RequestParam Integer quantite,
+                                 @RequestParam(required = false) String taille,
                                  HttpSession session) {
         Cart cart = getCart(session);
-        cart.updateQuantity(productId, quantite);
+        cart.updateQuantity(productId, quantite, taille);
         session.setAttribute(CART_SESSION_KEY, cart);
         
         return "redirect:/panier";
@@ -82,9 +95,10 @@ public class PanierController {
      */
     @GetMapping("/supprimer/{productId}")
     public String removeFromCart(@PathVariable Integer productId,
+                                 @RequestParam(required = false) String taille,
                                  HttpSession session) {
         Cart cart = getCart(session);
-        cart.removeItem(productId);
+        cart.removeItem(productId, taille);
         session.setAttribute(CART_SESSION_KEY, cart);
         
         return "redirect:/panier";

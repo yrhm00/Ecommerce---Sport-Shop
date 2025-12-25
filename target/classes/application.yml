@@ -9,7 +9,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/janvier_db
+    url: jdbc:postgresql://localhost:5432/janvier_db?useUnicode=true&characterEncoding=UTF-8
     username: postgres
     password: Ilies2004_
     driver-class-name: org.postgresql.Driver
@@ -24,6 +24,11 @@ spring:
   sql:
     init:
       mode: always
+      encoding: UTF-8
+  
+  messages:
+    encoding: UTF-8
+    basename: messages
 
   mvc:
     view:
@@ -31,6 +36,6 @@ spring:
       suffix: .jsp
 
 paypal:
-  client-id: AV5z2Iw__PdSYbBimrrnCimrojRsVg7dU4zWuxeTo1njjs8NqZtczLRoYoBeua1cEKH_cgvNe6lICaqP
-  client-secret: EMraopDis2OSNbdGRYxfhXwwYl3p8QnufbbWt8laVOGH0KXqe8TxkhjMjRz4kIq4watP4gFZO91PxWoV
+  client-id: ASXWWhLhd_mx15AtVETBFrxq-4KsZicGJnon4ppqKqapddF8Ugkov7T4zRZNhtCWm5-szWaVu3Sj3ive
+  client-secret: EKXVHcJ9TfPvJn08uuhEQZEkviCVHL7OXLK0YFRkUDNg1ozIXjL_yKlB6GWPXo99QzgMDvP_OBLcVjnr
   mode: sandbox

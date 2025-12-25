@@ -1,6 +1,8 @@
 package be.henallux.janvier.dataAccess.util;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.stereotype.Component;
@@ -12,6 +14,7 @@ import be.henallux.janvier.dataAccess.entity.AuthorityEntity;
 import be.henallux.janvier.dataAccess.entity.CategoryEntity;
 import be.henallux.janvier.dataAccess.entity.CategoryTranslationEntity;
 import be.henallux.janvier.dataAccess.entity.ProductEntity;
+import be.henallux.janvier.dataAccess.entity.ProductSizeEntity;
 import be.henallux.janvier.dataAccess.entity.ProductTranslationEntity;
 import be.henallux.janvier.dataAccess.entity.UserEntity;
 import be.henallux.janvier.model.Authority;
@@ -31,18 +34,25 @@ public class ProviderConverter {
     // ========== USER ==========
     public User userEntityToModel(UserEntity entity) {
         if (entity == null) return null;
-        User model = mapper.map(entity, User.class);
         
-        // Conversion des authorities
-        Set<Authority> authorities = new HashSet<>();
-        if (entity.getAuthorities() != null) {
-            for (AuthorityEntity authEntity : entity.getAuthorities()) {
-                authorities.add(new Authority(authEntity.getAuthority()));
+        try {
+            User model = mapper.map(entity, User.class);
+            
+            // Conversion des authorities
+            Set<Authority> authorities = new HashSet<>();
+            if (entity.getAuthorities() != null) {
+                for (AuthorityEntity authEntity : entity.getAuthorities()) {
+                    authorities.add(new Authority(authEntity.getAuthority()));
+                }
             }
+            model.setAuthorities(authorities);
+            
+            return model;
+        } catch (Exception e) {
+            System.err.println("Error mapping UserEntity to User: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
-        model.setAuthorities(authorities);
-        
-        return model;
     }
 
     public UserEntity userModelToEntity(User model) {
@@ -121,6 +131,19 @@ public class ProviderConverter {
         if (entity.getCategory() != null) {
             // Idéalement on traduirait aussi le nom de la catégorie ici, mais cela demanderait plus de logique
             model.setCategoryNom(entity.getCategory().getNom());
+        }
+
+        // Conversion des tailles et stocks
+        if (entity.getSizes() != null && !entity.getSizes().isEmpty()) {
+            Map<String, Integer> sizesStock = new HashMap<>();
+            int totalStock = 0;
+            for (ProductSizeEntity sizeEntity : entity.getSizes()) {
+                sizesStock.put(sizeEntity.getTaille(), sizeEntity.getStock());
+                totalStock += sizeEntity.getStock();
+            }
+            model.setSizesStock(sizesStock);
+            // On met à jour le stock total affiché pour correspondre à la somme des variantes
+            model.setStock(totalStock);
         }
         
         return model;

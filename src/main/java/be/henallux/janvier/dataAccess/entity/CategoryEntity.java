@@ -1,9 +1,17 @@
 package be.henallux.janvier.dataAccess.entity;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "categories")
@@ -20,6 +28,9 @@ public class CategoryEntity implements Serializable {
     @Column(name = "nom", nullable = false, length = 100)
     private String nom;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private Set<CategoryTranslationEntity> translations = new HashSet<>();
 
@@ -30,9 +41,10 @@ public class CategoryEntity implements Serializable {
     public CategoryEntity() {
     }
 
-    public CategoryEntity(String code, String nom) {
+    public CategoryEntity(String code, String nom, String imageUrl) {
         this.code = code;
         this.nom = nom;
+        this.imageUrl = imageUrl;
     }
 
     // Getters et Setters
@@ -58,6 +70,14 @@ public class CategoryEntity implements Serializable {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Set<CategoryTranslationEntity> getTranslations() {

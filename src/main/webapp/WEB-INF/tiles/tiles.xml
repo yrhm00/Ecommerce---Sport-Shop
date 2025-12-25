@@ -65,5 +65,18 @@
         <put-attribute name="titre" value="Commande Validée" />
         <put-attribute name="contenu" value="/WEB-INF/jsp/commande-succes.jsp" />
     </definition>
+
+
+    <!-- Page À Propos -->
+    <definition name="a-propos" extends="base.definition">
+        <put-attribute name="titre" value="À Propos" />
+        <put-attribute name="contenu" value="/WEB-INF/jsp/a-propos.jsp" />
+    </definition>
+
+    <!-- Page Profil -->
+    <definition name="profil" extends="base.definition">
+        <put-attribute name="titre" value="Mon Profil" />
+        <put-attribute name="contenu" value="/WEB-INF/jsp/profil.jsp" />
+    </definition>
 </tiles-definitions>
 
