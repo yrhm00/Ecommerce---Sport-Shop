@@ -27,6 +27,8 @@ CREATE TABLE users (
     email VARCHAR(150) UNIQUE NOT NULL,
     telephone VARCHAR(20),
     adresse TEXT NOT NULL,
+    code_postal VARCHAR(10),
+    localite VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -123,10 +125,10 @@ CREATE TABLE order_lines (
 
 -- USERS (mot de passe : "password" hashé avec BCrypt)
 -- Hash BCrypt pour "password" : $2a$10$N9qo8uLOickgx2ZMRZoMye/Jo8oIxdpEoGb8rJRJF6vXKJf1E/6b2
-INSERT INTO users (username, password, enabled, nom, prenom, email, telephone, adresse) VALUES
-('admin', '$2a$10$N9qo8uLOickgx2ZMRZoMye/Jo8oIxdpEoGb8rJRJF6vXKJf1E/6b2', TRUE, 'Admin', 'Super', 'admin@eshop.be', '0471234567', '1 Rue de la Paix, 5000 Namur'),
-('user1', '$2a$10$N9qo8uLOickgx2ZMRZoMye/Jo8oIxdpEoGb8rJRJF6vXKJf1E/6b2', TRUE, 'Dupont', 'Jean', 'jean.dupont@email.be', '0472345678', '10 Avenue des Tilleuls, 4000 Liège'),
-('user2', '$2a$10$N9qo8uLOickgx2ZMRZoMye/Jo8oIxdpEoGb8rJRJF6vXKJf1E/6b2', TRUE, 'Martin', 'Sophie', 'sophie.martin@email.be', '0473456789', '25 Rue du Commerce, 6000 Charleroi');
+INSERT INTO users (username, password, enabled, nom, prenom, email, telephone, adresse, code_postal, localite) VALUES
+('admin', '$2a$10$N9qo8uLOickgx2ZMRZoMye/Jo8oIxdpEoGb8rJRJF6vXKJf1E/6b2', TRUE, 'Admin', 'Super', 'admin@eshop.be', '0471234567', '1 Rue de la Paix', '5000', 'Namur'),
+('user1', '$2a$10$N9qo8uLOickgx2ZMRZoMye/Jo8oIxdpEoGb8rJRJF6vXKJf1E/6b2', TRUE, 'Dupont', 'Jean', 'jean.dupont@email.be', '0472345678', '10 Avenue des Tilleuls', '4000', 'Liège'),
+('user2', '$2a$10$N9qo8uLOickgx2ZMRZoMye/Jo8oIxdpEoGb8rJRJF6vXKJf1E/6b2', TRUE, 'Martin', 'Sophie', 'sophie.martin@email.be', '0473456789', '25 Rue du Commerce', '6000', 'Charleroi');
 
 -- AUTHORITIES (Rôles)
 INSERT INTO authorities (username, authority) VALUES

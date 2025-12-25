@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import be.henallux.janvier.dataAccess.dao.ProductDataAccess;
 import be.henallux.janvier.model.Cart;
 import be.henallux.janvier.model.Product;
+import be.henallux.janvier.service.ProductService;
 
 @Controller
 @RequestMapping(value="/panier")
@@ -21,12 +21,12 @@ public class PanierController {
 
     private static final String CART_SESSION_KEY = "cart";
 
-    private final ProductDataAccess productDAO;
+    private final ProductService productService;
     private final be.henallux.janvier.service.PromotionService promotionService;
 
     @Autowired
-    public PanierController(ProductDataAccess productDAO, be.henallux.janvier.service.PromotionService promotionService) {
-        this.productDAO = productDAO;
+    public PanierController(ProductService productService, be.henallux.janvier.service.PromotionService promotionService) {
+        this.productService = productService;
         this.promotionService = promotionService;
     }
 
@@ -53,9 +53,14 @@ public class PanierController {
                             @RequestParam(defaultValue = "1") Integer quantite,
                             @RequestParam(required = false) String taille,
                             HttpSession session) {
-        Product product = productDAO.findById(productId);
+        Product product = productService.getProductById(productId);
         
         if (product != null) {
+            // Vérifier que la quantité est positive
+            if (quantite <= 0) {
+                return "redirect:/panier";
+            }
+
             // Vérifier le stock spécifique à la taille si une taille est fournie
             boolean stockSuffisant = false;
             if (taille != null && !taille.isEmpty() && product.getSizesStock() != null && product.getSizesStock().containsKey(taille)) {
@@ -83,6 +88,9 @@ public class PanierController {
                                  @RequestParam Integer quantite,
                                  @RequestParam(required = false) String taille,
                                  HttpSession session) {
+        if (quantite <= 0) {
+             return "redirect:/panier";
+        }
         Cart cart = getCart(session);
         cart.updateQuantity(productId, quantite, taille);
         session.setAttribute(CART_SESSION_KEY, cart);

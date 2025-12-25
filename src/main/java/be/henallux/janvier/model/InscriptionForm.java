@@ -2,6 +2,7 @@ package be.henallux.janvier.model;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
@@ -10,36 +11,65 @@ import javax.validation.constraints.Size;
 public class InscriptionForm {
 
     @NotNull
-    @Size(min = 2, max = 50, message = "Le nom d'utilisateur doit contenir entre 2 et 50 caractères")
+    @Size(min = 2, max = 50)
     private String username;
 
     @NotNull
-    @Size(min = 6, max = 100, message = "Le mot de passe doit contenir au moins 6 caractères")
+    @Size(min = 6, max = 100)
     private String password;
 
     @NotNull
-    @Size(min = 6, max = 100, message = "Veuillez confirmer le mot de passe")
+    @Size(min = 6, max = 100)
     private String confirmPassword;
 
     @NotNull
-    @Size(min = 2, max = 100, message = "Le nom doit contenir entre 2 et 100 caractères")
+    @Size(min = 2, max = 100)
     private String nom;
 
     @NotNull
-    @Size(min = 2, max = 100, message = "Le prénom doit contenir entre 2 et 100 caractères")
+    @Size(min = 2, max = 100)
     private String prenom;
 
     @NotNull
-    @Email(message = "Format d'email invalide")
+    @Email
     @Size(max = 150)
     private String email;
 
-    @Size(min = 0, max = 20, message = "Le téléphone doit contenir au maximum 20 caractères")
+    @Size(min = 9, max = 20)
+    @Pattern(regexp = "^[0-9+ ]*$", message = "Le numéro de téléphone ne doit contenir que des chiffres, des espaces ou le symbole +")
     private String telephone;
 
     @NotNull
-    @Size(min = 10, max = 500, message = "L'adresse doit contenir entre 10 et 500 caractères")
+    @NotNull
+    @Size(min = 10, max = 500)
     private String adresse;
+
+    @NotNull
+    @Size(min = 4, max = 10)
+    @Pattern(regexp = "^[0-9]*$", message = "Le code postal ne doit contenir que des chiffres.")
+    private String codePostal;
+
+    @NotNull
+    @Size(min = 2, max = 100)
+    private String localite;
+
+    // ... existing getters/setters ...
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
+    }
+
+    public String getLocalite() {
+        return localite;
+    }
+
+    public void setLocalite(String localite) {
+        this.localite = localite;
+    }
 
     // Constructeur
     public InscriptionForm() {

@@ -1,10 +1,19 @@
 package be.henallux.janvier.dataAccess.entity;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -41,6 +50,12 @@ public class UserEntity implements Serializable {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "code_postal", length = 10)
+    private String codePostal;
+
+    @Column(name = "localite", length = 100)
+    private String localite;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<AuthorityEntity> authorities = new HashSet<>();
@@ -139,6 +154,22 @@ public class UserEntity implements Serializable {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
+    }
+
+    public String getLocalite() {
+        return localite;
+    }
+
+    public void setLocalite(String localite) {
+        this.localite = localite;
     }
 
     public Set<AuthorityEntity> getAuthorities() {
