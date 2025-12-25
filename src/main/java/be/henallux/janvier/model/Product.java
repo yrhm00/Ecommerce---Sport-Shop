@@ -1,6 +1,8 @@
 package be.henallux.janvier.model;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Product {
 
@@ -10,9 +12,13 @@ public class Product {
     private String nom;
     private String description;
     private BigDecimal prix;
+    private BigDecimal originalPrice; // Prix avant réduction (si applicable)
     private Integer stock;
     private String imageUrl;
     private String categoryNom; // Pour l'affichage
+    private Map<String, Integer> sizesStock = new HashMap<>(); // Taille -> Stock
+    private boolean isNewArrival = false; // Indique si le produit est nouveau
+    private java.time.LocalDateTime createdAt; // Date de création du produit
 
     // Constructeurs
     public Product() {
@@ -98,6 +104,38 @@ public class Product {
 
     public void setCategoryNom(String categoryNom) {
         this.categoryNom = categoryNom;
+    }
+
+    public Map<String, Integer> getSizesStock() {
+        return sizesStock;
+    }
+
+    public void setSizesStock(Map<String, Integer> sizesStock) {
+        this.sizesStock = sizesStock;
+    }
+
+    public BigDecimal getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public void setOriginalPrice(BigDecimal originalPrice) {
+        this.originalPrice = originalPrice;
+    }
+
+    public boolean isNewArrival() {
+        return isNewArrival;
+    }
+
+    public void setNewArrival(boolean isNewArrival) {
+        this.isNewArrival = isNewArrival;
+    }
+
+    public java.time.LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(java.time.LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
 

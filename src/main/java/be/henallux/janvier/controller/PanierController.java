@@ -1,15 +1,19 @@
 package be.henallux.janvier.controller;
 
-import be.henallux.janvier.dataAccess.dao.ProductDataAccess;
-import be.henallux.janvier.model.Cart;
-import be.henallux.janvier.model.CartItem;
-import be.henallux.janvier.model.Product;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpSession;
+import be.henallux.janvier.dataAccess.dao.ProductDataAccess;
+import be.henallux.janvier.model.Cart;
+import be.henallux.janvier.model.Product;
 
 @Controller
 @RequestMapping(value="/panier")
@@ -18,10 +22,12 @@ public class PanierController {
     private static final String CART_SESSION_KEY = "cart";
 
     private final ProductDataAccess productDAO;
+    private final be.henallux.janvier.service.PromotionService promotionService;
 
     @Autowired
-    public PanierController(ProductDataAccess productDAO) {
+    public PanierController(ProductDataAccess productDAO, be.henallux.janvier.service.PromotionService promotionService) {
         this.productDAO = productDAO;
+        this.promotionService = promotionService;
     }
 
     /**
@@ -30,6 +36,11 @@ public class PanierController {
     @GetMapping
     public String showPanier(HttpSession session, Model model) {
         Cart cart = getCart(session);
+        
+        // Calculer la promotion
+        java.math.BigDecimal discount = promotionService.calculateDiscount(cart.getTotal());
+        cart.setDiscountAmount(discount);
+        
         model.addAttribute("cart", cart);
         return "panier";
     }
@@ -40,13 +51,25 @@ public class PanierController {
     @GetMapping("/ajouter/{productId}")
     public String addToCart(@PathVariable Integer productId,
                             @RequestParam(defaultValue = "1") Integer quantite,
+                            @RequestParam(required = false) String taille,
                             HttpSession session) {
         Product product = productDAO.findById(productId);
         
-        if (product != null && product.getStock() >= quantite) {
-            Cart cart = getCart(session);
-            cart.addItem(product, quantite);
-            session.setAttribute(CART_SESSION_KEY, cart);
+        if (product != null) {
+            // Vérifier le stock spécifique à la taille si une taille est fournie
+            boolean stockSuffisant = false;
+            if (taille != null && !taille.isEmpty() && product.getSizesStock() != null && product.getSizesStock().containsKey(taille)) {
+                 stockSuffisant = product.getSizesStock().get(taille) >= quantite;
+            } else {
+                 // Fallback au stock global si pas de taille ou pas de gestion de taille
+                 stockSuffisant = product.getStock() >= quantite;
+            }
+
+            if (stockSuffisant) {
+                Cart cart = getCart(session);
+                cart.addItem(product, quantite, taille);
+                session.setAttribute(CART_SESSION_KEY, cart);
+            }
         }
         
         return "redirect:/panier";
@@ -58,9 +81,10 @@ public class PanierController {
     @PostMapping("/modifier")
     public String updateQuantity(@RequestParam Integer productId,
                                  @RequestParam Integer quantite,
+                                 @RequestParam(required = false) String taille,
                                  HttpSession session) {
         Cart cart = getCart(session);
-        cart.updateQuantity(productId, quantite);
+        cart.updateQuantity(productId, quantite, taille);
         session.setAttribute(CART_SESSION_KEY, cart);
         
         return "redirect:/panier";
@@ -71,9 +95,10 @@ public class PanierController {
      */
     @GetMapping("/supprimer/{productId}")
     public String removeFromCart(@PathVariable Integer productId,
+                                 @RequestParam(required = false) String taille,
                                  HttpSession session) {
         Cart cart = getCart(session);
-        cart.removeItem(productId);
+        cart.removeItem(productId, taille);
         session.setAttribute(CART_SESSION_KEY, cart);
         
         return "redirect:/panier";

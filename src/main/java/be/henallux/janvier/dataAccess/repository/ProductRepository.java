@@ -1,10 +1,11 @@
 package be.henallux.janvier.dataAccess.repository;
 
-import be.henallux.janvier.dataAccess.entity.ProductEntity;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import be.henallux.janvier.dataAccess.entity.ProductEntity;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Integer> {
@@ -17,6 +18,12 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Integer>
     
     // Lister tous les produits d'une catégorie triés par nom
     List<ProductEntity> findByCategoryIdOrderByNomAsc(Integer categoryId);
+
+    // Trouver les 4 derniers produits ajoutés
+    List<ProductEntity> findTop4ByOrderByCreatedAtDesc();
+
+    // Trouver les produits dont le prix est supérieur à un certain montant
+    List<ProductEntity> findByPrixGreaterThan(java.math.BigDecimal prix);
 }
 
 

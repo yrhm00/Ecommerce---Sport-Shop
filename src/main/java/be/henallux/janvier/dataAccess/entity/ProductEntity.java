@@ -1,11 +1,22 @@
 package be.henallux.janvier.dataAccess.entity;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "products")
@@ -46,6 +57,9 @@ public class ProductEntity implements Serializable {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<ProductTranslationEntity> translations = new HashSet<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<ProductSizeEntity> sizes = new HashSet<>();
 
     // Constructeurs
     public ProductEntity() {
@@ -148,6 +162,14 @@ public class ProductEntity implements Serializable {
 
     public void setTranslations(Set<ProductTranslationEntity> translations) {
         this.translations = translations;
+    }
+
+    public Set<ProductSizeEntity> getSizes() {
+        return sizes;
+    }
+
+    public void setSizes(Set<ProductSizeEntity> sizes) {
+        this.sizes = sizes;
     }
 }
 

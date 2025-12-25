@@ -4,6 +4,7 @@
 -- ============================================
 
 -- Suppression des tables existantes (pour reset propre)
+DROP TABLE IF EXISTS product_sizes CASCADE;
 DROP TABLE IF EXISTS order_lines CASCADE;
 DROP TABLE IF EXISTS orders CASCADE;
 DROP TABLE IF EXISTS product_translations CASCADE;
@@ -46,7 +47,8 @@ CREATE TABLE authorities (
 CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
     code VARCHAR(50) UNIQUE NOT NULL,
-    nom VARCHAR(100) NOT NULL
+    nom VARCHAR(100) NOT NULL,
+    image_url VARCHAR(255)
 );
 
 -- ============================================
@@ -134,11 +136,11 @@ INSERT INTO authorities (username, authority) VALUES
 ('user2', 'ROLE_USER');
 
 -- CATEGORIES
-INSERT INTO categories (code, nom) VALUES
-('CHAUSSURES', 'Chaussures de Running'),
-('VETEMENTS', 'Vêtements Techniques'),
-('ACCESSOIRES', 'Accessoires'),
-('MONTRES', 'Montres et Trackers');
+INSERT INTO categories (code, nom, image_url) VALUES
+('CHAUSSURES', 'Chaussures de Running', '/images/categories/shoes.png'),
+('VETEMENTS', 'Vêtements Techniques', '/images/categories/clothes.png'),
+('ACCESSOIRES', 'Accessoires', '/images/categories/accessories.png'),
+('MONTRES', 'Montres et Trackers', '/images/categories/watches.png');
 
 -- CATEGORY TRANSLATIONS
 INSERT INTO category_translations (category_id, locale, nom_traduit) VALUES
@@ -153,30 +155,30 @@ INSERT INTO category_translations (category_id, locale, nom_traduit) VALUES
 
 -- PRODUCTS (Chaussures)
 INSERT INTO products (category_id, code, nom, description, prix, stock, image_url) VALUES
-(1, 'SHOE-001', 'Nike Air Zoom Pegasus', 'Chaussure polyvalente pour tous types de courses', 129.99, 50, NULL),
-(1, 'SHOE-002', 'Adidas Ultraboost', 'Amorti maximal et retour d''énergie optimal', 159.99, 30, NULL),
-(1, 'SHOE-003', 'Asics Gel-Kayano', 'Stabilité et confort pour longues distances', 149.99, 40, NULL),
-(1, 'SHOE-004', 'New Balance 880', 'Équilibre parfait entre amorti et réactivité', 119.99, 60, NULL);
+(1, 'SHOE-001', 'Nike Air Zoom Pegasus', 'Chaussure polyvalente pour tous types de courses', 129.99, 50, '/images/products/nike_pegasus.png'),
+(1, 'SHOE-002', 'Adidas Ultraboost', 'Amorti maximal et retour d''énergie optimal', 159.99, 30, '/images/products/adidas_ultraboost.png'),
+(1, 'SHOE-003', 'Asics Gel-Kayano', 'Stabilité et confort pour longues distances', 149.99, 40, '/images/products/asics_gel_kayano.png'),
+(1, 'SHOE-004', 'New Balance 880', 'Équilibre parfait entre amorti et réactivité', 119.99, 60, '/images/products/new_balance_880.png');
 
 -- PRODUCTS (Vêtements)
 INSERT INTO products (category_id, code, nom, description, prix, stock, image_url) VALUES
-(2, 'CLOTH-001', 'T-shirt Running Nike Dri-FIT', 'Évacuation de la transpiration', 39.99, 100, NULL),
-(2, 'CLOTH-002', 'Short Adidas Own The Run', 'Léger et respirant', 34.99, 80, NULL),
-(2, 'CLOTH-003', 'Veste coupe-vent Gore-Tex', 'Protection contre le vent et la pluie', 89.99, 35, NULL),
-(2, 'CLOTH-004', 'Legging compression Under Armour', 'Support musculaire optimal', 49.99, 70, NULL);
+(2, 'CLOTH-001', 'T-shirt Running Nike Dri-FIT', 'Évacuation de la transpiration', 39.99, 100, '/images/products/nike_tshirt.png'),
+(2, 'CLOTH-002', 'Short Adidas Own The Run', 'Léger et respirant', 34.99, 80, '/images/products/adidas_shorts.png'),
+(2, 'CLOTH-003', 'Veste coupe-vent Gore-Tex', 'Protection contre le vent et la pluie', 89.99, 35, '/images/products/gore_tex_jacket.png'),
+(2, 'CLOTH-004', 'Legging compression Under Armour', 'Support musculaire optimal', 49.99, 70, '/images/products/under_armour_legging.png');
 
 -- PRODUCTS (Accessoires)
 INSERT INTO products (category_id, code, nom, description, prix, stock, image_url) VALUES
-(3, 'ACC-001', 'Bouteille isotherme CamelBak', 'Garde l''eau fraîche pendant 24h', 24.99, 120, NULL),
-(3, 'ACC-002', 'Sac à dos running Salomon', 'Hydratation intégrée', 79.99, 45, NULL),
-(3, 'ACC-003', 'Casquette Nike AeroBill', 'Protection solaire et légèreté', 29.99, 90, NULL),
-(3, 'ACC-004', 'Ceinture porte-bidon FlipBelt', 'Discrète et confortable', 34.99, 55, NULL);
+(3, 'ACC-001', 'Bouteille isotherme CamelBak', 'Garde l''eau fraîche pendant 24h', 24.99, 120, '/images/products/camelbak_bottle.png'),
+(3, 'ACC-002', 'Sac à dos running Salomon', 'Hydratation intégrée', 79.99, 45, '/images/products/salomon_backpack.png'),
+(3, 'ACC-003', 'Casquette Nike AeroBill', 'Protection solaire et légèreté', 29.99, 90, '/images/products/nike_cap.png'),
+(3, 'ACC-004', 'Ceinture porte-bidon FlipBelt', 'Discrète et confortable', 34.99, 55, '/images/products/flipbelt.png');
 
 -- PRODUCTS (Montres)
 INSERT INTO products (category_id, code, nom, description, prix, stock, image_url) VALUES
-(4, 'WATCH-001', 'Garmin Forerunner 255', 'GPS et cardiofréquencemètre intégré', 349.99, 25, NULL),
-(4, 'WATCH-002', 'Polar Vantage V2', 'Analyse avancée de la performance', 499.99, 15, NULL),
-(4, 'WATCH-003', 'Apple Watch SE', 'Fitness et santé au quotidien', 279.99, 40, NULL);
+(4, 'WATCH-001', 'Garmin Forerunner 255', 'GPS et cardiofréquencemètre intégré', 349.99, 25, '/images/products/garmin_forerunner_255.png'),
+(4, 'WATCH-002', 'Polar Vantage V2', 'Analyse avancée de la performance', 499.99, 15, '/images/products/polar_vantage_v2.png'),
+(4, 'WATCH-003', 'Apple Watch SE', 'Fitness et santé au quotidien', 279.99, 40, '/images/products/apple_watch_se.png');
 
 -- PRODUCT TRANSLATIONS
 INSERT INTO product_translations (product_id, locale, nom_traduit, description_traduite) VALUES
@@ -214,6 +216,40 @@ INSERT INTO product_translations (product_id, locale, nom_traduit, description_t
 (14, 'en', 'Polar Vantage V2', 'Advanced performance analysis'),
 (15, 'fr', 'Apple Watch SE', 'Fitness et santé au quotidien'),
 (15, 'en', 'Apple Watch SE', 'Daily fitness and health');
+
+-- ============================================
+-- TABLE: PRODUCT_SIZES (Stock par taille)
+-- ============================================
+CREATE TABLE product_sizes (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL,
+    taille VARCHAR(10) NOT NULL,
+    stock INTEGER DEFAULT 0,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    UNIQUE(product_id, taille)
+);
+
+-- PRODUCT SIZES (Données de test standardisées)
+INSERT INTO product_sizes (product_id, taille, stock) VALUES
+-- CHAUSSURES (40-44)
+-- Nike Air Zoom Pegasus (ID 1)
+(1, '40', 10), (1, '41', 10), (1, '42', 10), (1, '43', 10), (1, '44', 10),
+-- Adidas Ultraboost (ID 2)
+(2, '40', 10), (2, '41', 10), (2, '42', 10), (2, '43', 10), (2, '44', 10),
+-- Asics Gel-Kayano (ID 3)
+(3, '40', 10), (3, '41', 10), (3, '42', 10), (3, '43', 10), (3, '44', 10),
+-- New Balance 880 (ID 4)
+(4, '40', 10), (4, '41', 10), (4, '42', 10), (4, '43', 10), (4, '44', 10),
+
+-- VETEMENTS (S, M, L, XL)
+-- Nike T-shirt (ID 5)
+(5, 'S', 20), (5, 'M', 20), (5, 'L', 20), (5, 'XL', 20),
+-- Adidas Shorts (ID 6)
+(6, 'S', 20), (6, 'M', 20), (6, 'L', 20), (6, 'XL', 20),
+-- Veste Gore-Tex (ID 7)
+(7, 'S', 10), (7, 'M', 10), (7, 'L', 10), (7, 'XL', 10),
+-- Legging Under Armour (ID 8)
+(8, 'S', 20), (8, 'M', 20), (8, 'L', 20), (8, 'XL', 20);
 
 -- Fin du script
 

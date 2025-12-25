@@ -1,15 +1,16 @@
 package be.henallux.janvier.dataAccess.dao;
 
-import be.henallux.janvier.dataAccess.entity.ProductEntity;
-import be.henallux.janvier.dataAccess.repository.ProductRepository;
-import be.henallux.janvier.dataAccess.util.ProviderConverter;
-import be.henallux.janvier.model.Product;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import be.henallux.janvier.dataAccess.entity.ProductEntity;
+import be.henallux.janvier.dataAccess.repository.ProductRepository;
+import be.henallux.janvier.dataAccess.util.ProviderConverter;
+import be.henallux.janvier.model.Product;
 
 @Service
 @Transactional
@@ -28,8 +29,9 @@ public class ProductDAO implements ProductDataAccess {
     public List<Product> findAll() {
         List<ProductEntity> entities = repository.findAll();
         List<Product> products = new ArrayList<>();
+        String language = org.springframework.context.i18n.LocaleContextHolder.getLocale().getLanguage();
         for (ProductEntity entity : entities) {
-            products.add(converter.productEntityToModel(entity));
+            products.add(converter.productEntityToModel(entity, language));
         }
         return products;
     }
@@ -37,15 +39,38 @@ public class ProductDAO implements ProductDataAccess {
     @Override
     public Product findById(Integer id) {
         ProductEntity entity = repository.findById(id).orElse(null);
-        return converter.productEntityToModel(entity);
+        String language = org.springframework.context.i18n.LocaleContextHolder.getLocale().getLanguage();
+        return converter.productEntityToModel(entity, language);
     }
 
     @Override
     public List<Product> findByCategoryId(Integer categoryId) {
         List<ProductEntity> entities = repository.findByCategoryIdOrderByNomAsc(categoryId);
         List<Product> products = new ArrayList<>();
+        String language = org.springframework.context.i18n.LocaleContextHolder.getLocale().getLanguage();
         for (ProductEntity entity : entities) {
-            products.add(converter.productEntityToModel(entity));
+            products.add(converter.productEntityToModel(entity, language));
+        }
+        return products;
+    }
+    @Override
+    public List<Product> findNewArrivals() {
+        List<ProductEntity> entities = repository.findTop4ByOrderByCreatedAtDesc();
+        return convertEntitiesToModels(entities);
+    }
+
+    @Override
+    public List<Product> findPromotions() {
+        // Logique métier : les produits > 100€ sont en promo
+        List<ProductEntity> entities = repository.findByPrixGreaterThan(new java.math.BigDecimal("100.00"));
+        return convertEntitiesToModels(entities);
+    }
+
+    private List<Product> convertEntitiesToModels(List<ProductEntity> entities) {
+        List<Product> products = new ArrayList<>();
+        String language = org.springframework.context.i18n.LocaleContextHolder.getLocale().getLanguage();
+        for (ProductEntity entity : entities) {
+            products.add(converter.productEntityToModel(entity, language));
         }
         return products;
     }

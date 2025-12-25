@@ -1,18 +1,15 @@
 package be.henallux.janvier.dataAccess.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import be.henallux.janvier.dataAccess.entity.AuthorityEntity;
 import be.henallux.janvier.dataAccess.entity.UserEntity;
 import be.henallux.janvier.dataAccess.repository.AuthorityRepository;
 import be.henallux.janvier.dataAccess.repository.UserRepository;
 import be.henallux.janvier.dataAccess.util.ProviderConverter;
-import be.henallux.janvier.model.Authority;
 import be.henallux.janvier.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -34,11 +31,14 @@ public class UserDAO implements UserDataAccess {
         UserEntity entity = converter.userModelToEntity(user);
         entity = userRepository.save(entity);
         
-        // Sauvegarder les autorités si présentes
+        // Sauvegarder les autorités si présentes (uniquement si elles n'existent pas déjà)
         if (user.getAuthorities() != null && !user.getAuthorities().isEmpty()) {
             for (org.springframework.security.core.GrantedAuthority grantedAuthority : user.getAuthorities()) {
-                AuthorityEntity authEntity = new AuthorityEntity(entity.getUsername(), grantedAuthority.getAuthority());
-                authorityRepository.save(authEntity);
+                // Vérifier si l'autorité existe déjà
+                if (!authorityRepository.existsByUsernameAndAuthority(entity.getUsername(), grantedAuthority.getAuthority())) {
+                    AuthorityEntity authEntity = new AuthorityEntity(entity.getUsername(), grantedAuthority.getAuthority());
+                    authorityRepository.save(authEntity);
+                }
             }
         }
         
