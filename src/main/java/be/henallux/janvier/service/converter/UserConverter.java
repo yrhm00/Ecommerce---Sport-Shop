@@ -41,8 +41,11 @@ public class UserConverter {
         user.setLocalite(entity.getLocalite());
         user.setEnabled(entity.getEnabled());
 
-        // Map authorities
-        // user.setAuthorities(...)
+        if (entity.getAuthorities() != null) {
+            user.setAuthorities(entity.getAuthorities().stream()
+                    .map(authEntity -> new be.henallux.janvier.model.Authority(authEntity.getAuthority()))
+                    .collect(java.util.stream.Collectors.toSet()));
+        }
         return user;
     }
 }

@@ -240,9 +240,9 @@ CREATE TABLE IF NOT EXISTS product_sizes (
 -- USERS
 -- Hash BCrypt pour "password" : $2a$10$N9qo8uLOickgx2ZMRZoMye/Jo8oIxdpEoGb8rJRJF6vXKJf1E/6b2
 INSERT INTO users (username, password, enabled, nom, prenom, email, telephone, adresse, code_postal, localite) VALUES
-('admin', '$2a$10$N9qo8uLOickgx2ZMRZoMye/Jo8oIxdpEoGb8rJRJF6vXKJf1E/6b2', TRUE, 'Admin', 'Super', 'admin@eshop.be', '0471234567', '1 Rue de la Paix', '5000', 'Namur'),
-('user1', '$2a$10$N9qo8uLOickgx2ZMRZoMye/Jo8oIxdpEoGb8rJRJF6vXKJf1E/6b2', TRUE, 'Dupont', 'Jean', 'jean.dupont@email.be', '0472345678', '10 Avenue des Tilleuls', '4000', 'Liège'),
-('user2', '$2a$10$N9qo8uLOickgx2ZMRZoMye/Jo8oIxdpEoGb8rJRJF6vXKJf1E/6b2', TRUE, 'Martin', 'Sophie', 'sophie.martin@email.be', '0473456789', '25 Rue du Commerce', '6000', 'Charleroi')
+('admin', '$2a$10$/2urROQQh/Mexox4nfvAze8ILXAsfP1iLjY7UqGxKuOTmmMY9jViS', TRUE, 'Admin', 'Super', 'admin@eshop.be', '0471234567', '1 Rue de la Paix', '5000', 'Namur'),
+('user1', '$2a$10$/2urROQQh/Mexox4nfvAze8ILXAsfP1iLjY7UqGxKuOTmmMY9jViS', TRUE, 'Dupont', 'Jean', 'jean.dupont@email.be', '0472345678', '10 Avenue des Tilleuls', '4000', 'Liège'),
+('user2', '$2a$10$/2urROQQh/Mexox4nfvAze8ILXAsfP1iLjY7UqGxKuOTmmMY9jViS', TRUE, 'Martin', 'Sophie', 'sophie.martin@email.be', '0473456789', '25 Rue du Commerce', '6000', 'Charleroi')
 ON CONFLICT (username) DO NOTHING;
 
 -- AUTHORITIES
