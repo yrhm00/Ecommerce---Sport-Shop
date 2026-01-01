@@ -53,6 +53,9 @@ Les utilisateurs suivants sont pré-configurés avec le mot de passe : `password
 
 *   **Admin** : `admin` (Rôles: ADMIN, USER)
 *   **Clients** : `user1`, `user2` (Rôles: USER)
+*   **PayPal Sandbox** (pour tester le paiement) :
+    *   **Email** : `sb-yplla48320769@personal.example.com`
+    *   **Mot de passe** : `4e5@TalV`
 
 ### Pages principales
 *   **Accueil** : `/`
