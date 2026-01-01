@@ -34,28 +34,30 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests()
+                .authorizeRequests()
                 // Pages accessibles à tous
-                .antMatchers("/", "/accueil", "/produits/**", "/connexion/**", "/inscription/**", "/css/**", "/js/**", "/images/**", "/webjars/**").permitAll()
+                .antMatchers("/", "/accueil", "/produits/**", "/connexion/**", "/inscription/**", "/css/**", "/js/**",
+                        "/images/**", "/webjars/**", "/a-propos/**")
+                .permitAll()
                 // Pages nécessitant une authentification
                 .antMatchers("/panier/**", "/commandes/**").authenticated()
                 // Toutes les autres requêtes nécessitent une authentification
                 .anyRequest().authenticated()
-            .and()
-            .formLogin()
+                .and()
+                .formLogin()
                 .loginPage("/connexion")
                 .loginProcessingUrl("/connexion")
                 .defaultSuccessUrl("/", true)
                 .failureUrl("/connexion?error")
                 .permitAll()
-            .and()
-            .logout()
+                .and()
+                .logout()
                 .logoutUrl("/deconnexion")
                 .logoutSuccessUrl("/?logout")
                 .permitAll()
-            .and()
-            .csrf().disable(); // TODO: Activer CSRF en production
-            
+                .and()
+                .csrf().disable();
+
         return http.build();
     }
 }

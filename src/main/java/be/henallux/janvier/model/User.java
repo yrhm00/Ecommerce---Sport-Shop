@@ -1,11 +1,14 @@
 package be.henallux.janvier.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 public class User implements UserDetails {
 
@@ -13,10 +16,21 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private Boolean enabled;
+    @NotEmpty
+    @Size(min = 2, max = 100)
     private String nom;
+
+    @NotEmpty
+    @Size(min = 2, max = 100)
     private String prenom;
+
+    @NotEmpty
+    @Email
+    @Size(max = 150)
     private String email;
     private String telephone;
+    @NotEmpty
+    @Size(min = 5, max = 500)
     private String adresse;
     private Set<Authority> authorities = new HashSet<>();
 
@@ -135,9 +149,28 @@ public class User implements UserDetails {
         this.adresse = adresse;
     }
 
+    private String codePostal;
+    private String localite;
+
+    // ... existing getters/setters ...
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
+    }
+
+    public String getLocalite() {
+        return localite;
+    }
+
+    public void setLocalite(String localite) {
+        this.localite = localite;
+    }
+
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
 }
-
-

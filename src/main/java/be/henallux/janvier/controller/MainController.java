@@ -11,7 +11,7 @@ public class MainController {
 
     @GetMapping
     public String home(Model model) {
-        // "accueil" correspond à la définition dans tiles.xml
+
         return "accueil";
     }
 }

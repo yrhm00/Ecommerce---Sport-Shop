@@ -9,21 +9,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import be.henallux.janvier.dataAccess.dao.CategoryDataAccess;
 import be.henallux.janvier.model.Category;
 import be.henallux.janvier.model.Product;
+import be.henallux.janvier.service.CategoryService;
 import be.henallux.janvier.service.ProductService;
 
 @Controller
 @RequestMapping(value="/produits")
 public class ProduitController {
 
-    private final CategoryDataAccess categoryDAO;
+    private final CategoryService categoryService;
     private final ProductService productService;
 
     @Autowired
-    public ProduitController(CategoryDataAccess categoryDAO, ProductService productService) {
-        this.categoryDAO = categoryDAO;
+    public ProduitController(CategoryService categoryService, ProductService productService) {
+        this.categoryService = categoryService;
         this.productService = productService;
     }
 
@@ -32,7 +32,7 @@ public class ProduitController {
      */
     @GetMapping
     public String showCategories(Model model) {
-        List<Category> categories = categoryDAO.findAll();
+        List<Category> categories = categoryService.getAllCategories();
         model.addAttribute("categories", categories);
         return "produits"; // Tiles Definition
     }
@@ -42,12 +42,12 @@ public class ProduitController {
      */
     @GetMapping("/categorie/{categoryId}")
     public String showProductsByCategory(@PathVariable Integer categoryId, Model model) {
-        Category category = categoryDAO.findById(categoryId);
+        Category category = categoryService.getCategoryById(categoryId);
         List<Product> products = productService.getProductsByCategory(categoryId);
         
         model.addAttribute("category", category);
         model.addAttribute("products", products);
-        return "produits-liste"; // Tiles Definition
+        return "produits-liste"; 
     }
 
     /**
@@ -57,7 +57,7 @@ public class ProduitController {
     public String showProductDetails(@PathVariable Integer productId, Model model) {
         Product product = productService.getProductById(productId);
         model.addAttribute("product", product);
-        return "produit-detail"; // Tiles Definition
+        return "produit-detail"; 
     }
 
     @GetMapping("/nouveautes")

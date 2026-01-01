@@ -58,7 +58,7 @@ public class Cart {
     }
 
     /**
-     * Supprime un produit du panier (taille spécifique ou nulle)
+     * Supprime un produit du panier 
      */
     public void removeItem(Integer productId, String taille) {
         items.removeIf(item -> item.getProduct().getId().equals(productId) &&

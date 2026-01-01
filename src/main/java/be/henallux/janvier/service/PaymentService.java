@@ -46,12 +46,11 @@ public class PaymentService {
 
         List<PurchaseUnitRequest> purchaseUnitRequests = new ArrayList<>();
         
-        // Generate a unique Invoice ID to prevent "Duplicate Transaction" errors in Sandbox
         String invoiceId = "INV-" + java.util.UUID.randomUUID().toString();
         System.out.println("Invoice ID: " + invoiceId);
         
         PurchaseUnitRequest purchaseUnitRequest = new PurchaseUnitRequest()
-                .invoiceId(invoiceId) // Prevents TRANSACTION_REFUSED if blocking duplicate payments is on
+                .invoiceId(invoiceId)
                 .amount(new AmountWithBreakdown()
                         .currencyCode("EUR") // Changed from USD to EUR
                         .value(totalAmount.setScale(2, java.math.RoundingMode.HALF_UP).toString()));
@@ -87,7 +86,7 @@ public class PaymentService {
             System.err.println("Error Message: " + e.getMessage());
             e.printStackTrace();
             return null;
-        } catch (Exception e) { // Catching all other exceptions
+        } catch (Exception e) { 
             System.err.println("=== PayPal Create Order FAILED (Unexpected Error) ===");
             System.err.println("Error Message: " + e.getMessage());
             System.err.println("Error Class: " + e.getClass().getName());
@@ -103,10 +102,10 @@ public class PaymentService {
         try {
             var response = payPalHttpClient.execute(request);
             Order order = response.result();
-            System.out.println("PayPal Capture Status: " + order.status()); // DEBUG
+            System.out.println("PayPal Capture Status: " + order.status()); 
             return "COMPLETED".equals(order.status());
         } catch (IOException e) {
-            System.err.println("PayPal Capture Failed: " + e.getMessage()); // DEBUG
+            System.err.println("PayPal Capture Failed: " + e.getMessage()); 
             e.printStackTrace();
             return false;
         }
