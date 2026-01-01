@@ -15,19 +15,19 @@ import be.henallux.janvier.model.Cart;
 import be.henallux.janvier.service.OrderService;
 
 @Controller
-@RequestMapping(value="/commandes")
+@RequestMapping(value = "/commandes")
 public class CommandeController {
 
     private final OrderService orderService;
-    private final be.henallux.janvier.service.PromotionService promotionService;
+    private final be.henallux.janvier.service.CartService cartService;
     private final be.henallux.janvier.service.PaymentService paymentService;
 
     @Autowired
-    public CommandeController(OrderService orderService, 
-                              be.henallux.janvier.service.PromotionService promotionService,
-                              be.henallux.janvier.service.PaymentService paymentService) {
+    public CommandeController(OrderService orderService,
+            be.henallux.janvier.service.CartService cartService,
+            be.henallux.janvier.service.PaymentService paymentService) {
         this.orderService = orderService;
-        this.promotionService = promotionService;
+        this.cartService = cartService;
         this.paymentService = paymentService;
     }
 
@@ -39,16 +39,15 @@ public class CommandeController {
         if (principal == null) {
             return "redirect:/connexion";
         }
-        
+
         Cart cart = (Cart) session.getAttribute("cart");
         if (cart == null || cart.getItems().isEmpty()) {
             return "redirect:/panier";
         }
-        
+
         // Recalculer la promo pour être sûr
-        java.math.BigDecimal discount = promotionService.calculateDiscount(cart.getTotal());
-        cart.setDiscountAmount(discount);
-        
+        cartService.recalculateCart(cart);
+
         model.addAttribute("cart", cart);
         return "checkout"; // page de confirmation
     }
@@ -57,12 +56,12 @@ public class CommandeController {
      * Confirme la commande
      */
     @PostMapping("/confirmer")
-    public String confirmOrder(HttpSession session, Principal principal, 
-                               javax.servlet.http.HttpServletRequest request,
-                               Model model) {
+    public String confirmOrder(HttpSession session, Principal principal,
+            javax.servlet.http.HttpServletRequest request,
+            Model model) {
         System.out.println("=== CONFIRM ORDER CALLED ===");
         System.out.println("Principal: " + (principal != null ? principal.getName() : "NULL"));
-        
+
         if (principal == null) {
             System.out.println("Principal is null, redirecting to login");
             return "redirect:/connexion";
@@ -71,26 +70,27 @@ public class CommandeController {
         Cart cart = (Cart) session.getAttribute("cart");
         System.out.println("Cart: " + (cart != null ? "EXISTS" : "NULL"));
         System.out.println("Cart items: " + (cart != null ? cart.getItems().size() : "N/A"));
-        
+
         if (cart != null && !cart.getItems().isEmpty()) {
             System.out.println("Cart total: " + cart.getTotalWithDiscount());
-            
+
             // ENREGISTRER LA COMMANDE AVANT LE PAIEMENT avec paye = false
             System.out.println("Creating order in database...");
             Integer orderId = orderService.createOrder(cart, principal.getName(), false);
             System.out.println("Order created with ID: " + orderId);
-            
+
             if (orderId != null) {
                 // Stocker l'ID de commande en session pour mise à jour après paiement
                 session.setAttribute("pendingOrderId", orderId);
-                
-                String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+
+                String baseUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+                        + request.getContextPath();
                 String returnUrl = baseUrl + "/commandes/pay/success";
                 String cancelUrl = baseUrl + "/commandes/pay/cancel";
-                
+
                 System.out.println("Calling PayPal createOrder...");
                 String approvalLink = paymentService.createOrder(cart.getTotalWithDiscount(), returnUrl, cancelUrl);
-                
+
                 if (approvalLink != null) {
                     System.out.println("PayPal approval link received, redirecting...");
                     // Vider le panier maintenant que la commande est enregistrée
@@ -103,18 +103,19 @@ public class CommandeController {
             } else {
                 System.err.println("Order ID is NULL - order creation failed");
             }
-            
+
             model.addAttribute("paymentError", "error.payment.init");
             model.addAttribute("cart", cart);
             return "checkout";
         }
-        
+
         System.out.println("Cart is empty or null, redirecting to products");
         return "redirect:/produits";
     }
 
     @GetMapping("/pay/success")
-    public String handlePaySuccess(@org.springframework.web.bind.annotation.RequestParam("token") String token, HttpSession session, Principal principal) {
+    public String handlePaySuccess(@org.springframework.web.bind.annotation.RequestParam("token") String token,
+            HttpSession session, Principal principal) {
         if (paymentService.captureOrder(token)) {
             // Mettre à jour le statut de paiement de la commande
             Integer orderId = (Integer) session.getAttribute("pendingOrderId");
@@ -122,7 +123,7 @@ public class CommandeController {
                 orderService.updateOrderPaymentStatus(orderId, true);
                 session.removeAttribute("pendingOrderId");
             }
-            
+
             return "redirect:/commandes/succes";
         }
         return "redirect:/commandes/checkout?error=payment_failed";
@@ -138,6 +139,6 @@ public class CommandeController {
      */
     @GetMapping("/succes")
     public String success() {
-        return "commande-succes"; 
+        return "commande-succes";
     }
 }

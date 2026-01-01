@@ -1,53 +1,30 @@
 package be.henallux.janvier.dataAccess.entity;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "categories")
-public class CategoryEntity implements Serializable {
+@Table(name = "category")
+public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "code", unique = true, nullable = false, length = 50)
+    @Column(name = "code")
     private String code;
 
-    @Column(name = "nom", nullable = false, length = 100)
-    private String nom;
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
+    private List<CategoryTranslationEntity> translations = new ArrayList<>();
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<ProductEntity> products = new ArrayList<>();
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private Set<CategoryTranslationEntity> translations = new HashSet<>();
-
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    private Set<ProductEntity> products = new HashSet<>();
-
-    // Constructeurs
     public CategoryEntity() {
     }
 
-    public CategoryEntity(String code, String nom, String imageUrl) {
-        this.code = code;
-        this.nom = nom;
-        this.imageUrl = imageUrl;
-    }
-
-    // Getters et Setters
     public Integer getId() {
         return id;
     }
@@ -64,37 +41,19 @@ public class CategoryEntity implements Serializable {
         this.code = code;
     }
 
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public Set<CategoryTranslationEntity> getTranslations() {
+    public List<CategoryTranslationEntity> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(Set<CategoryTranslationEntity> translations) {
+    public void setTranslations(List<CategoryTranslationEntity> translations) {
         this.translations = translations;
     }
 
-    public Set<ProductEntity> getProducts() {
+    public List<ProductEntity> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<ProductEntity> products) {
+    public void setProducts(List<ProductEntity> products) {
         this.products = products;
     }
 }
-
-

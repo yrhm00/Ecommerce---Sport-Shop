@@ -1,32 +1,37 @@
 package be.henallux.janvier.service;
 
-import java.util.List;
-
+import be.henallux.janvier.dataAccess.dao.CategoryDAO;
+import be.henallux.janvier.dataAccess.entity.CategoryEntity;
+import be.henallux.janvier.model.Category;
+import be.henallux.janvier.service.converter.CategoryConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import be.henallux.janvier.dataAccess.dao.CategoryDataAccess;
-import be.henallux.janvier.model.Category;
+import java.util.ArrayList;
 
 @Service
 public class CategoryService {
 
-    private final CategoryDataAccess categoryDAO;
+    private final CategoryDAO categoryDAO;
+    private final CategoryConverter categoryConverter;
 
     @Autowired
-    public CategoryService(CategoryDataAccess categoryDAO) {
+    public CategoryService(CategoryDAO categoryDAO, CategoryConverter categoryConverter) {
         this.categoryDAO = categoryDAO;
+        this.categoryConverter = categoryConverter;
     }
 
-    public List<Category> getAllCategories() {
-        return categoryDAO.findAll();
+    public ArrayList<Category> getAllCategories() {
+        ArrayList<CategoryEntity> categoryEntities = categoryDAO.getAllCategories();
+        ArrayList<Category> categories = new ArrayList<>();
+        for (CategoryEntity categoryEntity : categoryEntities) {
+            categories.add(categoryConverter.categoryEntityToCategoryModel(categoryEntity));
+        }
+        return categories;
     }
 
     public Category getCategoryById(Integer id) {
-        return categoryDAO.findById(id);
-    }
-
-    public Category getCategoryByCode(String code) {
-        return categoryDAO.findByCode(code);
+        CategoryEntity categoryEntity = categoryDAO.getCategoryById(id);
+        return categoryConverter.categoryEntityToCategoryModel(categoryEntity);
     }
 }

@@ -1,81 +1,51 @@
 package be.henallux.janvier.dataAccess.entity;
 
-import java.io.Serializable;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "products")
-public class ProductEntity implements Serializable {
+@Table(name = "product")
+public class ProductEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "category_id", nullable = false)
+    @Column(name = "category_id")
     private Integer categoryId;
 
-    @Column(name = "code", unique = true, nullable = false, length = 50)
+    @Column(name = "code")
     private String code;
 
-    @Column(name = "nom", nullable = false, length = 150)
-    private String nom;
+    @Column(name = "price")
+    private BigDecimal price;
 
-    @Column(name = "description", columnDefinition = "TEXT")
-    private String description;
-
-    @Column(name = "prix", nullable = false, precision = 10, scale = 2)
-    private BigDecimal prix;
+    @Column(name = "image")
+    private String image;
 
     @Column(name = "stock")
-    private Integer stock = 0;
-
-    @Column(name = "image_url", length = 255)
-    private String imageUrl;
+    private Integer stock;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "category_id", insertable = false, updatable = false)
     private CategoryEntity category;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<ProductTranslationEntity> translations = new HashSet<>();
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    private List<ProductTranslationEntity> translations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<ProductSizeEntity> sizes = new HashSet<>();
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY) // Sizes might be separate or handled here
+    private List<ProductSizeEntity> sizes = new ArrayList<>();
 
-    // Constructeurs
     public ProductEntity() {
     }
 
-    public ProductEntity(Integer categoryId, String code, String nom, String description, BigDecimal prix, Integer stock) {
-        this.categoryId = categoryId;
-        this.code = code;
-        this.nom = nom;
-        this.description = description;
-        this.prix = prix;
-        this.stock = stock;
-        this.createdAt = LocalDateTime.now();
-    }
-
-    // Getters et Setters
     public Integer getId() {
         return id;
     }
@@ -100,28 +70,20 @@ public class ProductEntity implements Serializable {
         this.code = code;
     }
 
-    public String getNom() {
-        return nom;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
-    public String getDescription() {
-        return description;
+    public String getImage() {
+        return image;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getPrix() {
-        return prix;
-    }
-
-    public void setPrix(BigDecimal prix) {
-        this.prix = prix;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Integer getStock() {
@@ -130,14 +92,6 @@ public class ProductEntity implements Serializable {
 
     public void setStock(Integer stock) {
         this.stock = stock;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -156,21 +110,19 @@ public class ProductEntity implements Serializable {
         this.category = category;
     }
 
-    public Set<ProductTranslationEntity> getTranslations() {
+    public List<ProductTranslationEntity> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(Set<ProductTranslationEntity> translations) {
+    public void setTranslations(List<ProductTranslationEntity> translations) {
         this.translations = translations;
     }
 
-    public Set<ProductSizeEntity> getSizes() {
+    public List<ProductSizeEntity> getSizes() {
         return sizes;
     }
 
-    public void setSizes(Set<ProductSizeEntity> sizes) {
+    public void setSizes(List<ProductSizeEntity> sizes) {
         this.sizes = sizes;
     }
 }
-
-

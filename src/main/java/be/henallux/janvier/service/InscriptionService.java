@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import be.henallux.janvier.dataAccess.dao.UserDataAccess;
 import be.henallux.janvier.model.Authority;
 import be.henallux.janvier.model.InscriptionForm;
 import be.henallux.janvier.model.User;
@@ -15,12 +14,12 @@ import be.henallux.janvier.model.User;
 @Service
 public class InscriptionService {
 
-    private final UserDataAccess userDAO;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public InscriptionService(UserDataAccess userDAO, PasswordEncoder passwordEncoder) {
-        this.userDAO = userDAO;
+    public InscriptionService(UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -35,14 +34,14 @@ public class InscriptionService {
      * Vérifie si le username existe déjà
      */
     public boolean usernameExists(String username) {
-        return userDAO.existsByUsername(username);
+        return userService.existsByUsername(username);
     }
 
     /**
      * Vérifie si l'email existe déjà
      */
     public boolean emailExists(String email) {
-        return userDAO.existsByEmail(email);
+        return userService.existsByEmail(email);
     }
 
     /**
@@ -52,7 +51,7 @@ public class InscriptionService {
         // Créer l'utilisateur
         User user = new User();
         user.setUsername(form.getUsername());
-        user.setPassword(passwordEncoder.encode(form.getPassword())); 
+        user.setPassword(passwordEncoder.encode(form.getPassword()));
         user.setNom(form.getNom());
         user.setPrenom(form.getPrenom());
         user.setEmail(form.getEmail());
@@ -62,14 +61,12 @@ public class InscriptionService {
         user.setLocalite(form.getLocalite());
         user.setEnabled(true);
 
-        
         Set<Authority> authorities = new HashSet<>();
         authorities.add(new Authority("ROLE_USER"));
         user.setAuthorities(authorities);
 
         // Sauvegarder en base de données
-        return userDAO.save(user);
+        userService.save(user);
+        return user;
     }
 }
-
-

@@ -10,15 +10,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import be.henallux.janvier.dataAccess.dao.UserDAO;
-import be.henallux.janvier.model.User;
-
 public class InscriptionServiceTest {
 
     private InscriptionService inscriptionService;
 
     @Mock
-    private UserDAO userDAO;
+    private UserService userService;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -26,7 +23,7 @@ public class InscriptionServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        inscriptionService = new InscriptionService(userDAO, passwordEncoder);
+        inscriptionService = new InscriptionService(userService, passwordEncoder);
     }
 
     @Test
@@ -47,8 +44,8 @@ public class InscriptionServiceTest {
 
     @Test
     public void testUsernameExists() {
-        when(userDAO.findByUsername("existingUser")).thenReturn(new User());
-        when(userDAO.findByUsername("newUser")).thenReturn(null);
+        when(userService.existsByUsername("existingUser")).thenReturn(true);
+        when(userService.existsByUsername("newUser")).thenReturn(false);
 
         assertTrue(inscriptionService.usernameExists("existingUser"));
         assertFalse(inscriptionService.usernameExists("newUser"));

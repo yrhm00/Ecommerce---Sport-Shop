@@ -8,12 +8,11 @@ import java.util.List;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Integer> {
-    
+
     // Trouver une catégorie par son code
     CategoryEntity findByCode(String code);
-    
-    // Lister toutes les catégories triées par nom
-    List<CategoryEntity> findAllByOrderByNomAsc();
+
+    // Lister toutes les catégories triées par code (nom n'existe plus dans
+    // l'entité)
+    List<CategoryEntity> findAllByOrderByCodeAsc();
 }
-
-

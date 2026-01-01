@@ -12,18 +12,18 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import be.henallux.janvier.dataAccess.dao.UserDAO;
 import be.henallux.janvier.model.User;
+import be.henallux.janvier.service.UserService;
 
 @Controller
-@RequestMapping(value="/profil")
+@RequestMapping(value = "/profil")
 public class ProfileController {
 
-    private final UserDAO userDAO;
+    private final UserService userService;
 
     @Autowired
-    public ProfileController(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public ProfileController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
@@ -31,27 +31,27 @@ public class ProfileController {
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/connexion";
         }
-        
+
         String username = authentication.getName();
-        User user = userDAO.findByUsername(username);
-        
+        User user = userService.findByUsername(username);
+
         if (user == null) {
             return "redirect:/deconnexion";
         }
-        
+
         // On ne veut pas afficher le mot de passe hashé
         user.setPassword(null);
-        
+
         model.addAttribute("user", user);
         return "profil";
     }
 
     @PostMapping
     public String updateProfile(@Valid @ModelAttribute("user") User formUser,
-                               BindingResult bindingResult,
-                               Model model,
-                               Authentication authentication) {
-        
+            BindingResult bindingResult,
+            Model model,
+            Authentication authentication) {
+
         if (authentication == null || !authentication.isAuthenticated()) {
             return "redirect:/connexion";
         }
@@ -61,18 +61,18 @@ public class ProfileController {
         }
 
         String currentUsername = authentication.getName();
-        User currentUser = userDAO.findByUsername(currentUsername);
-        
+        User currentUser = userService.findByUsername(currentUsername);
+
         // Vérifier que l'utilisateur existe
         if (currentUser == null) {
             model.addAttribute("errorMessage", "Utilisateur introuvable.");
             return "profil";
         }
-        
+
         // Empêcher la modification du username si le formulaire a été trafiqué
         if (!currentUsername.equals(formUser.getUsername())) {
-             model.addAttribute("errorMessage", "Impossible de modifier le nom d'utilisateur.");
-             return "profil";
+            model.addAttribute("errorMessage", "Impossible de modifier le nom d'utilisateur.");
+            return "profil";
         }
 
         // Mise à jour des champs autorisés
@@ -81,18 +81,18 @@ public class ProfileController {
         currentUser.setEmail(formUser.getEmail());
         currentUser.setTelephone(formUser.getTelephone());
         currentUser.setAdresse(formUser.getAdresse());
-        
-        // On garde le mot de passe existant 
+
+        // On garde le mot de passe existant
         // On garde enabled et authorities
-        
+
         try {
-            userDAO.save(currentUser);
+            userService.save(currentUser);
             model.addAttribute("successMessage", "Profil mis à jour avec succès!");
             // Recharger l'utilisateur pour l'affichage
-            
+
             // Mais on doit masquer le password
             currentUser.setPassword(null);
-            model.addAttribute("user", currentUser); 
+            model.addAttribute("user", currentUser);
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Erreur lors de la mise à jour: " + e.getMessage());
             return "profil";

@@ -1,79 +1,44 @@
 package be.henallux.janvier.dataAccess.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import be.henallux.janvier.dataAccess.entity.ProductEntity;
+import be.henallux.janvier.dataAccess.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import be.henallux.janvier.dataAccess.entity.ProductEntity;
-import be.henallux.janvier.dataAccess.repository.ProductRepository;
-import be.henallux.janvier.dataAccess.util.ProviderConverter;
-import be.henallux.janvier.model.Product;
+import java.util.ArrayList;
 
 @Service
 @Transactional
-public class ProductDAO implements ProductDataAccess {
+public class ProductDAO {
 
     private final ProductRepository repository;
-    private final ProviderConverter converter;
 
     @Autowired
-    public ProductDAO(ProductRepository repository, ProviderConverter converter) {
+    public ProductDAO(ProductRepository repository) {
         this.repository = repository;
-        this.converter = converter;
     }
 
-    @Override
-    public List<Product> findAll() {
-        List<ProductEntity> entities = repository.findAll();
-        List<Product> products = new ArrayList<>();
-        String language = org.springframework.context.i18n.LocaleContextHolder.getLocale().getLanguage();
-        for (ProductEntity entity : entities) {
-            products.add(converter.productEntityToModel(entity, language));
-        }
-        return products;
+    public ArrayList<ProductEntity> getAllProducts() {
+        return new ArrayList<>(repository.findAll());
     }
 
-    @Override
-    public Product findById(Integer id) {
-        ProductEntity entity = repository.findById(id).orElse(null);
-        String language = org.springframework.context.i18n.LocaleContextHolder.getLocale().getLanguage();
-        return converter.productEntityToModel(entity, language);
+    @SuppressWarnings("null")
+    public ProductEntity getProductById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
 
-    @Override
-    public List<Product> findByCategoryId(Integer categoryId) {
-        List<ProductEntity> entities = repository.findByCategoryIdOrderByNomAsc(categoryId);
-        List<Product> products = new ArrayList<>();
-        String language = org.springframework.context.i18n.LocaleContextHolder.getLocale().getLanguage();
-        for (ProductEntity entity : entities) {
-            products.add(converter.productEntityToModel(entity, language));
-        }
-        return products;
-    }
-    @Override
-    public List<Product> findNewArrivals() {
-        List<ProductEntity> entities = repository.findTop4ByOrderByCreatedAtDesc();
-        return convertEntitiesToModels(entities);
+    public ArrayList<ProductEntity> getProductsByCategoryId(Integer categoryId) {
+        // Warning: orderByNomAsc might fail if 'nom' field is gone. Ideally use
+        // repository.findByCategoryId(categoryId)
+        return new ArrayList<>(repository.findByCategoryId(categoryId));
     }
 
-    @Override
-    public List<Product> findPromotions() {
-        // Logique métier : les produits > 100€ sont en promo
-        List<ProductEntity> entities = repository.findByPrixGreaterThan(new java.math.BigDecimal("100.00"));
-        return convertEntitiesToModels(entities);
+    public ArrayList<ProductEntity> getNewArrivals() {
+        return new ArrayList<>(repository.findTop4ByOrderByCreatedAtDesc());
     }
 
-    private List<Product> convertEntitiesToModels(List<ProductEntity> entities) {
-        List<Product> products = new ArrayList<>();
-        String language = org.springframework.context.i18n.LocaleContextHolder.getLocale().getLanguage();
-        for (ProductEntity entity : entities) {
-            products.add(converter.productEntityToModel(entity, language));
-        }
-        return products;
+    public ArrayList<ProductEntity> getPromotions() {
+        return new ArrayList<>(repository.findByPriceGreaterThan(new java.math.BigDecimal("100.00")));
     }
 }
-
-

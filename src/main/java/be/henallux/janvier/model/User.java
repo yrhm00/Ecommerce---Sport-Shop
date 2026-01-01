@@ -15,6 +15,7 @@ public class User implements UserDetails {
     private Integer id;
     private String username;
     private String password;
+    private String confirmPassword;
     private Boolean enabled;
     @NotEmpty
     @Size(min = 2, max = 100)
@@ -99,6 +100,14 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public Boolean getEnabled() {

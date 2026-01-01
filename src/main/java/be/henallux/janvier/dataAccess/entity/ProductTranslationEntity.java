@@ -1,45 +1,32 @@
 package be.henallux.janvier.dataAccess.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
-@Table(name = "product_translations")
-public class ProductTranslationEntity implements Serializable {
+@Table(name = "product_translation")
+public class ProductTranslationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "product_id", nullable = false)
-    private Integer productId;
+    @Column(name = "language_id")
+    private String languageId;
 
-    @Column(name = "locale", nullable = false, length = 5)
-    private String locale;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "nom_traduit", nullable = false, length = 150)
-    private String nomTraduit;
-
-    @Column(name = "description_traduite", columnDefinition = "TEXT")
-    private String descriptionTraduite;
+    @Column(name = "description")
+    private String description;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "product_id")
     private ProductEntity product;
 
-    // Constructeurs
     public ProductTranslationEntity() {
     }
 
-    public ProductTranslationEntity(Integer productId, String locale, String nomTraduit, String descriptionTraduite) {
-        this.productId = productId;
-        this.locale = locale;
-        this.nomTraduit = nomTraduit;
-        this.descriptionTraduite = descriptionTraduite;
-    }
-
-    // Getters et Setters
     public Integer getId() {
         return id;
     }
@@ -48,36 +35,28 @@ public class ProductTranslationEntity implements Serializable {
         this.id = id;
     }
 
-    public Integer getProductId() {
-        return productId;
+    public String getLanguageId() {
+        return languageId;
     }
 
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public void setLanguageId(String languageId) {
+        this.languageId = languageId;
     }
 
-    public String getLocale() {
-        return locale;
+    public String getName() {
+        return name;
     }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getNomTraduit() {
-        return nomTraduit;
+    public String getDescription() {
+        return description;
     }
 
-    public void setNomTraduit(String nomTraduit) {
-        this.nomTraduit = nomTraduit;
-    }
-
-    public String getDescriptionTraduite() {
-        return descriptionTraduite;
-    }
-
-    public void setDescriptionTraduite(String descriptionTraduite) {
-        this.descriptionTraduite = descriptionTraduite;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public ProductEntity getProduct() {
@@ -88,5 +67,3 @@ public class ProductTranslationEntity implements Serializable {
         this.product = product;
     }
 }
-
-

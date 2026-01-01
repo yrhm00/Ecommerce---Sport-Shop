@@ -45,7 +45,7 @@ public class InscriptionForm {
 
     @NotNull
     @Size(min = 4, max = 10)
-    @Pattern(regexp = "^[0-9]*$", message = "Le code postal ne doit contenir que des chiffres.")
+    @Pattern(regexp = "^[0-9]*$", message = "{Pattern.inscriptionForm.codePostal}")
     private String codePostal;
 
     @NotNull
@@ -139,5 +139,3 @@ public class InscriptionForm {
         this.adresse = adresse;
     }
 }
-
-

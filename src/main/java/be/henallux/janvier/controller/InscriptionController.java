@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import be.henallux.janvier.model.InscriptionForm;
-import be.henallux.janvier.model.User;
+
 import be.henallux.janvier.service.InscriptionService;
 
 @Controller
-@RequestMapping(value="/inscription")
+@RequestMapping(value = "/inscription")
 public class InscriptionController {
 
     private final InscriptionService inscriptionService;
@@ -34,9 +34,9 @@ public class InscriptionController {
 
     @PostMapping
     public String processInscription(@Valid @ModelAttribute("inscriptionForm") InscriptionForm form,
-                                      BindingResult bindingResult,
-                                      Model model) {
-        
+            BindingResult bindingResult,
+            Model model) {
+
         // Vérification des erreurs de validation
         if (bindingResult.hasErrors()) {
             return "inscription";
@@ -61,7 +61,7 @@ public class InscriptionController {
         }
 
         // Créer l'utilisateur
-        User user = inscriptionService.createUser(form);
+        inscriptionService.createUser(form);
 
         // Redirection vers la page de connexion avec un message de succès
         model.addAttribute("successMessage", "Inscription réussie ! Vous pouvez maintenant vous connecter.");

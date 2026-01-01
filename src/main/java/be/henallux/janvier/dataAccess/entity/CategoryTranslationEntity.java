@@ -1,41 +1,29 @@
 package be.henallux.janvier.dataAccess.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
-@Table(name = "category_translations")
-public class CategoryTranslationEntity implements Serializable {
+@Table(name = "category_translation")
+public class CategoryTranslationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "category_id", nullable = false)
-    private Integer categoryId;
+    @Column(name = "language_id")
+    private String languageId;
 
-    @Column(name = "locale", nullable = false, length = 5)
-    private String locale;
-
-    @Column(name = "nom_traduit", nullable = false, length = 100)
-    private String nomTraduit;
+    @Column(name = "name")
+    private String name;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "category_id")
     private CategoryEntity category;
 
-    // Constructeurs
     public CategoryTranslationEntity() {
     }
 
-    public CategoryTranslationEntity(Integer categoryId, String locale, String nomTraduit) {
-        this.categoryId = categoryId;
-        this.locale = locale;
-        this.nomTraduit = nomTraduit;
-    }
-
-    // Getters et Setters
     public Integer getId() {
         return id;
     }
@@ -44,28 +32,20 @@ public class CategoryTranslationEntity implements Serializable {
         this.id = id;
     }
 
-    public Integer getCategoryId() {
-        return categoryId;
+    public String getLanguageId() {
+        return languageId;
     }
 
-    public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+    public void setLanguageId(String languageId) {
+        this.languageId = languageId;
     }
 
-    public String getLocale() {
-        return locale;
+    public String getName() {
+        return name;
     }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
-    }
-
-    public String getNomTraduit() {
-        return nomTraduit;
-    }
-
-    public void setNomTraduit(String nomTraduit) {
-        this.nomTraduit = nomTraduit;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public CategoryEntity getCategory() {
@@ -76,5 +56,3 @@ public class CategoryTranslationEntity implements Serializable {
         this.category = category;
     }
 }
-
-
