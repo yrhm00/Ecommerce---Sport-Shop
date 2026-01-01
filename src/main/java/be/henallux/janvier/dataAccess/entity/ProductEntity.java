@@ -4,11 +4,15 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 public class ProductEntity {
+
+    // ... (keeping fields until translations)
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,10 +25,10 @@ public class ProductEntity {
     @Column(name = "code")
     private String code;
 
-    @Column(name = "price")
+    @Column(name = "prix")
     private BigDecimal price;
 
-    @Column(name = "image")
+    @Column(name = "image_url")
     private String image;
 
     @Column(name = "stock")
@@ -38,7 +42,7 @@ public class ProductEntity {
     private CategoryEntity category;
 
     @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
-    private List<ProductTranslationEntity> translations = new ArrayList<>();
+    private Set<ProductTranslationEntity> translations = new HashSet<>();
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY) // Sizes might be separate or handled here
     private List<ProductSizeEntity> sizes = new ArrayList<>();
@@ -110,11 +114,11 @@ public class ProductEntity {
         this.category = category;
     }
 
-    public List<ProductTranslationEntity> getTranslations() {
+    public Set<ProductTranslationEntity> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(List<ProductTranslationEntity> translations) {
+    public void setTranslations(Set<ProductTranslationEntity> translations) {
         this.translations = translations;
     }
 

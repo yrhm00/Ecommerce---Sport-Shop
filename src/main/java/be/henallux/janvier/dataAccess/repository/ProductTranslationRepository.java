@@ -8,12 +8,10 @@ import java.util.List;
 
 @Repository
 public interface ProductTranslationRepository extends JpaRepository<ProductTranslationEntity, Integer> {
-    
+
     // Trouver les traductions d'un produit
     List<ProductTranslationEntity> findByProductId(Integer productId);
-    
+
     // Trouver une traduction spécifique
-    ProductTranslationEntity findByProductIdAndLocale(Integer productId, String locale);
+    ProductTranslationEntity findByProductIdAndLanguageId(Integer productId, String languageId);
 }
-
-

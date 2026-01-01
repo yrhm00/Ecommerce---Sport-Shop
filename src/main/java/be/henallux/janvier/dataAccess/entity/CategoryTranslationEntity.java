@@ -3,7 +3,7 @@ package be.henallux.janvier.dataAccess.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "category_translation")
+@Table(name = "category_translations")
 public class CategoryTranslationEntity {
 
     @Id
@@ -14,7 +14,7 @@ public class CategoryTranslationEntity {
     @Column(name = "language_id")
     private String languageId;
 
-    @Column(name = "name")
+    @Column(name = "nom_traduit")
     private String name;
 
     @ManyToOne

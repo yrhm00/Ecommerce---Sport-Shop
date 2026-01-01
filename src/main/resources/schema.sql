@@ -98,14 +98,23 @@ CREATE TABLE IF NOT EXISTS orders (
     paye BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
-
 -- ============================================
 -- SCHEMA SQL - PROJET JANVIER 2026
 -- Site de vente en ligne - E-Shop
 -- ============================================
 
--- NOTE: Suppression des DROP pour persistance (Quick fix)
--- On utilise CREATE TABLE IF NOT EXISTS
+-- NOTE: Suppression des DROP réactivée pour s'assurer que le schéma est propre
+-- Les tables seront recréées à chaque démarrage si mode=always
+
+DROP TABLE IF EXISTS product_sizes CASCADE;
+DROP TABLE IF EXISTS order_lines CASCADE;
+DROP TABLE IF EXISTS orders CASCADE;
+DROP TABLE IF EXISTS product_translations CASCADE;
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS category_translations CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS authorities CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
 -- ============================================
 -- TABLE: USERS (Utilisateurs/Clients)
@@ -152,10 +161,10 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE TABLE IF NOT EXISTS category_translations (
     id SERIAL PRIMARY KEY,
     category_id INTEGER NOT NULL,
-    locale VARCHAR(5) NOT NULL, -- 'fr', 'en'
+    language_id VARCHAR(5) NOT NULL, -- 'fr', 'en'
     nom_traduit VARCHAR(100) NOT NULL,
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
-    UNIQUE(category_id, locale)
+    UNIQUE(category_id, language_id)
 );
 
 -- ============================================
@@ -180,11 +189,11 @@ CREATE TABLE IF NOT EXISTS products (
 CREATE TABLE IF NOT EXISTS product_translations (
     id SERIAL PRIMARY KEY,
     product_id INTEGER NOT NULL,
-    locale VARCHAR(5) NOT NULL,
+    language_id VARCHAR(5) NOT NULL,
     nom_traduit VARCHAR(150) NOT NULL,
     description_traduite TEXT,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
-    UNIQUE(product_id, locale)
+    UNIQUE(product_id, language_id)
 );
 
 -- ============================================
@@ -253,7 +262,7 @@ INSERT INTO categories (code, nom, image_url) VALUES
 ON CONFLICT (code) DO NOTHING;
 
 -- CATEGORY TRANSLATIONS
-INSERT INTO category_translations (category_id, locale, nom_traduit) VALUES
+INSERT INTO category_translations (category_id, language_id, nom_traduit) VALUES
 (1, 'fr', 'Chaussures de Running'),
 (1, 'en', 'Running Shoes'),
 (2, 'fr', 'Vêtements Techniques'),
@@ -262,7 +271,7 @@ INSERT INTO category_translations (category_id, locale, nom_traduit) VALUES
 (3, 'en', 'Accessories'),
 (4, 'fr', 'Montres et Trackers'),
 (4, 'en', 'Watches and Trackers')
-ON CONFLICT (category_id, locale) DO NOTHING;
+ON CONFLICT (category_id, language_id) DO NOTHING;
 
 -- PRODUCTS (Chaussures)
 INSERT INTO products (category_id, code, nom, description, prix, stock, image_url) VALUES
@@ -296,7 +305,7 @@ INSERT INTO products (category_id, code, nom, description, prix, stock, image_ur
 ON CONFLICT (code) DO NOTHING;
 
 -- PRODUCT TRANSLATIONS
-INSERT INTO product_translations (product_id, locale, nom_traduit, description_traduite) VALUES
+INSERT INTO product_translations (product_id, language_id, nom_traduit, description_traduite) VALUES
 -- Chaussures
 (1, 'fr', 'Nike Air Zoom Pegasus', 'Chaussure polyvalente pour tous types de courses'),
 (1, 'en', 'Nike Air Zoom Pegasus', 'Versatile shoe for all types of running'),
@@ -331,7 +340,7 @@ INSERT INTO product_translations (product_id, locale, nom_traduit, description_t
 (14, 'en', 'Polar Vantage V2', 'Advanced performance analysis'),
 (15, 'fr', 'Apple Watch SE', 'Fitness et santé au quotidien'),
 (15, 'en', 'Apple Watch SE', 'Daily fitness and health')
-ON CONFLICT (product_id, locale) DO NOTHING;
+ON CONFLICT (product_id, language_id) DO NOTHING;
 
 -- PRODUCT SIZES
 INSERT INTO product_sizes (product_id, taille, stock) VALUES

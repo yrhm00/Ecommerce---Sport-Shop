@@ -2,10 +2,12 @@ package be.henallux.janvier.dataAccess.entity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 public class CategoryEntity {
 
     @Id
@@ -16,8 +18,11 @@ public class CategoryEntity {
     @Column(name = "code")
     private String code;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
-    private List<CategoryTranslationEntity> translations = new ArrayList<>();
+    private Set<CategoryTranslationEntity> translations = new HashSet<>();
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<ProductEntity> products = new ArrayList<>();
@@ -41,11 +46,19 @@ public class CategoryEntity {
         this.code = code;
     }
 
-    public List<CategoryTranslationEntity> getTranslations() {
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Set<CategoryTranslationEntity> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(List<CategoryTranslationEntity> translations) {
+    public void setTranslations(Set<CategoryTranslationEntity> translations) {
         this.translations = translations;
     }
 

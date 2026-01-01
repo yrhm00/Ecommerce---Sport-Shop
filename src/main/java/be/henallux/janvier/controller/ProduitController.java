@@ -15,7 +15,7 @@ import be.henallux.janvier.service.CategoryService;
 import be.henallux.janvier.service.ProductService;
 
 @Controller
-@RequestMapping(value="/produits")
+@RequestMapping(value = "/produits")
 public class ProduitController {
 
     private final CategoryService categoryService;
@@ -44,10 +44,10 @@ public class ProduitController {
     public String showProductsByCategory(@PathVariable Integer categoryId, Model model) {
         Category category = categoryService.getCategoryById(categoryId);
         List<Product> products = productService.getProductsByCategory(categoryId);
-        
+
         model.addAttribute("category", category);
         model.addAttribute("products", products);
-        return "produits-liste"; 
+        return "produits-liste";
     }
 
     /**
@@ -57,17 +57,17 @@ public class ProduitController {
     public String showProductDetails(@PathVariable Integer productId, Model model) {
         Product product = productService.getProductById(productId);
         model.addAttribute("product", product);
-        return "produit-detail"; 
+        return "produit-detail";
     }
 
     @GetMapping("/nouveautes")
     public String showNewArrivals(Model model) {
         List<Product> products = productService.getNewArrivals();
-        
+
         // Création d'une catégorie virtuelle pour l'affichage
         Category category = new Category();
         category.setNom("Nouveautés");
-        
+
         model.addAttribute("category", category);
         model.addAttribute("products", products);
         return "produits-liste";
@@ -76,11 +76,11 @@ public class ProduitController {
     @GetMapping("/promotions")
     public String showPromotions(Model model) {
         List<Product> products = productService.getPromotions();
-        
+
         // Création d'une catégorie virtuelle pour l'affichage
         Category category = new Category();
         category.setNom("Promotions");
-        
+
         model.addAttribute("category", category);
         model.addAttribute("products", products);
         return "produits-liste";

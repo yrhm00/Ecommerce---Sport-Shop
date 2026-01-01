@@ -8,12 +8,10 @@ import java.util.List;
 
 @Repository
 public interface CategoryTranslationRepository extends JpaRepository<CategoryTranslationEntity, Integer> {
-    
+
     // Trouver les traductions d'une catégorie
     List<CategoryTranslationEntity> findByCategoryId(Integer categoryId);
-    
+
     // Trouver une traduction spécifique
-    CategoryTranslationEntity findByCategoryIdAndLocale(Integer categoryId, String locale);
+    CategoryTranslationEntity findByCategoryIdAndLanguageId(Integer categoryId, String languageId);
 }
-
-

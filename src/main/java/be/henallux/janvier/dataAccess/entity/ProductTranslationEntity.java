@@ -3,7 +3,7 @@ package be.henallux.janvier.dataAccess.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "product_translation")
+@Table(name = "product_translations")
 public class ProductTranslationEntity {
 
     @Id
@@ -14,10 +14,10 @@ public class ProductTranslationEntity {
     @Column(name = "language_id")
     private String languageId;
 
-    @Column(name = "name")
+    @Column(name = "nom_traduit")
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description_traduite")
     private String description;
 
     @ManyToOne

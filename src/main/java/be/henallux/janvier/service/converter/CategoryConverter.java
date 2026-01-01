@@ -22,6 +22,7 @@ public class CategoryConverter {
                         t -> category.setNom(t.getName()),
                         () -> category.setNom(categoryEntity.getCode()) // Fallback
                 );
+        category.setImageUrl(categoryEntity.getImageUrl());
 
         // Assuming ImageUrl is not in Entity but maybe we want to ignore it or it was
         // missing
