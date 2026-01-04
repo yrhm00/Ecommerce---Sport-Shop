@@ -36,8 +36,8 @@ public class PanierController {
         Cart cart = getCart(session);
         // Recalcul déjà fait à chaque modif, mais par sécurité on peut le refaire ou
         // juste afficher
-        // cartService.recalculateCart(cart); // private method, assuming it's up to
-        // date
+        // cartService.recalculateCart(cart); // méthode privée, supposant qu'elle est à
+        // jour
         model.addAttribute("cart", cart);
         return "panier";
     }
@@ -54,8 +54,9 @@ public class PanierController {
                 return "redirect:/panier";
 
             boolean stockSuffisant = false;
-            // Note: getSizesStock check logic kept simple here or moved to service?
-            // Keeping stock check here for now as it redirects.
+            // Note : La logique de vérification getSizesStock gardée simple ici ou déplacée
+            // vers le service ?
+            // Garder la vérification du stock ici pour l'instant car elle redirige.
             if (taille != null && !taille.isEmpty() && product.getSizesStock() != null
                     && product.getSizesStock().containsKey(taille)) {
                 stockSuffisant = product.getSizesStock().get(taille) >= quantite;

@@ -33,7 +33,7 @@ public class CartService {
     }
 
     /**
-     * Recalculate total and apply promotions (Publicly accessible)
+     * Recalculer le total et appliquer les promotions (Accessible publiquement)
      */
     public void recalculateCart(Cart cart) {
         BigDecimal total = cart.getTotal();

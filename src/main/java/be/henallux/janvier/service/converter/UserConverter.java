@@ -20,8 +20,8 @@ public class UserConverter {
         entity.setLocalite(user.getLocalite());
         entity.setEnabled(user.isEnabled());
 
-        // Authorities are handled separately often, or we can map them here
-        // Currently skipped to avoid empty method warnings.
+        // Les autorités sont souvent gérées séparément, ou nous pouvons les mapper ici
+        // Actuellement ignoré pour éviter les avertissements de méthode vide.
 
         return entity;
     }

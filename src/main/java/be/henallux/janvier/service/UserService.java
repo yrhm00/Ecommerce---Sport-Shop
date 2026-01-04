@@ -25,10 +25,11 @@ public class UserService {
 
     public void save(User user) {
         userDAO.save(converter.userModelToEntity(user));
-        // Note: Authorities logic might be needed here or in DAO.
-        // UserDAO had manual authority saving logic.
-        // We should move that logic here or keep it in DAO but exposed differently.
-        // For now, simple save.
+        // Note : La logique des autorités pourrait être nécessaire ici ou dans le DAO.
+        // Le UserDAO avait une logique manuelle pour la sauvegarde des autorités.
+        // Nous devrions déplacer cette logique ici ou la garder dans le DAO mais
+        // l'exposer différemment.
+        // Pour l'instant, sauvegarde simple.
     }
 
     public User findByUsername(String username) {

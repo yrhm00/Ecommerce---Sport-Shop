@@ -29,7 +29,8 @@ public class ProductDAO {
     }
 
     public ArrayList<ProductEntity> getProductsByCategoryId(Integer categoryId) {
-        // Warning: orderByNomAsc might fail if 'nom' field is gone. Ideally use
+        // Attention : orderByNomAsc pourrait échouer si le champ 'nom' a disparu.
+        // Idéalement utiliser
         // repository.findByCategoryId(categoryId)
         return new ArrayList<>(repository.findByCategoryId(categoryId));
     }
